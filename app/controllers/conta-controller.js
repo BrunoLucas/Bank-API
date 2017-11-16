@@ -32,6 +32,30 @@ exports.salvar = (dadosConta, callback)=>{
     });
 };
 
+exports.depositar = (dadosConta, valor, callback)=>{
+    
+     
+    var conta = new db.Conta();
+    conta.numero = dadosConta.numero;
+    conta.agencia = dadosConta.agencia;
+    conta.nome = dadosConta.nome;
+    conta.data_criacao = new Date();
+    conta.saldo = dadosConta.saldo;
+
+    console.log(conta.numero);
+    // callback('err');
+
+    buscarPorNumeroContaEAgencia(conta.numer, conta.agencia, function(contaRetornada){
+        contaRetornada.save().then((contaAtualizada)=>{
+            callback(contaAtualizada);
+         }).error(msg=>{
+             callback(msg, 'Erro ao depostar em conta');
+         });
+    });
+
+   
+};
+
 exports.findById = function(id, callback){
 
     console.log(id);    
@@ -44,10 +68,9 @@ exports.findById = function(id, callback){
     });
 };
 
-exports.buscarPorNumeroConta = function(numeroConta, callback){
+exports.buscarPorNumeroContaEAgencia = function(numeroConta,agencia ,callback){
     
-        var query = "{numero : 123}";  
-        db.Conta.findOne().where("numero", numeroConta).exec((function(error, conta){
+        db.Conta.findOne().where("numero", numeroConta).and("agencia", agencia) .exec((function(error, conta){
             if(error){
                 callback(error, 'Erro ao buscar historico de conta');
             }else{

@@ -11,10 +11,11 @@ describe("Teste de Conta Controller", function(){
             
         });
 
-        it("Deve retornar uma conta pelo numero", function(){
-            contaController.buscarPorNumeroConta(123456,function(resp){
+        it("Deve retornar uma conta pelo numero e agencia", function(){
+            contaController.buscarPorNumeroContaEAgencia(123456,1803, function(resp){
                console.log(resp);
-                expect(resp.numero).toEqual('123456');
+                expect(resp.numero).toEqual(123456);
+                expect(resp.agencia).toEqual(1803);
             });     
         });
 
@@ -24,4 +25,10 @@ describe("Teste de Conta Controller", function(){
                 expect(resp).toBeUndefined(); 
             });     
         });
+
+        it("Deve depositar em conta existente", function(){
+            // TODO 
+            throw new Error('ainda nao implementado');
+        });
+
     });

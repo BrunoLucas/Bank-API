@@ -1,4 +1,6 @@
 var db = require('../db_config.js');
+var contaController = require('./conta-controller.js');
+
 exports.listar = function(callback){
 
     db.Transferencia.find({}, function(error, conta){
@@ -13,10 +15,45 @@ exports.listar = function(callback){
 
 exports.transferir = function(contaRemetente, contaDestinatario, dadosTransferencia, callback){
 
-    callback('eror', 'Ainda a ser implementado');
+    contaController.buscarPorNumeroContaEAgencia(contaRemetente.numero, contaRemetente.agencia, function(resp){
+        if(!resp){
+            throw new Error('Conta do remetente nao encontrada');
+        }
+    });
+    contaController.buscarPorNumeroContaEAgencia(contaDestinatario.numero, contaDestinatario.agencia, function(resp){
+        if(!resp){
+            throw new Error('Conta do destinatario nao encontrada');
+        }
+    });
+
+   var transferencia = new db.Transferencia();
+    transferencia.save().then((resultadoTransferencia)=>{
+        callback(transferencia);
+    }).error(error =>{
+        callback(error);
+    });
+
+
 };
 
-exports.depositar = function(contaRemetente, contaDestinatario, dadosTransferencia, callback){
-    callback('eror', 'Ainda a ser implementado');
+exports.depositar = function(contaRemetente, dadosTransferencia, callback){
+    contaController.buscarPorNumeroContaEAgencia(contaRemetente.numero, contaRemetente.agencia, function(resp){
+        if(!resp){
+            throw new Error('Conta do remetente nao encontrada');
+        }
+    });
+
+    contaController.depositar(contaRemetente, valorADepositar, function(resp){
+
+    });
+
+    var transferencia = new db.Transferencia();
+    transferencia.save().then((resultadoTransferencia)=>{
+        callback(transferencia);
+    }).error(error =>{
+        callback(error);
+    });
+
+
 };
     
