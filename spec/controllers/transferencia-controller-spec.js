@@ -46,7 +46,7 @@ describe("Teste de Transferencia Controller", function(){
 
         it("Deve depositar 90 para conta existente", function(){
             
-                        transferencia.tipo_transferencia('DEP');
+                        transferencia.tipo_transferencia = 'DEP';
                         transferenciaController.depositar(conta1,transferencia, function(resp){
 
                     

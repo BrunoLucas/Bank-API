@@ -20,7 +20,7 @@ describe("Teste de Conta Controller", function(){
         });
 
         it("Não deve encontrar uma conta inexistente", function(){
-            contaController.buscarPorNumeroConta(1,function(resp){
+            contaController.buscarPorNumeroContaEAgencia(1, 1803, function(resp){
                 console.log('resp' + resp);
                 expect(resp).toBeUndefined(); 
             });     
