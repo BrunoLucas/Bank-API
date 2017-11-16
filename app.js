@@ -25,6 +25,16 @@ app.post('/conta/',(req, res) =>{
     })
 });
 
+app.get('/conta/:numero/agencia/:agencia', (req, res) =>{
+
+    var numeroConta = validator.trim(validator.escape(req.params.numero));
+    var agenciaConta = validator.trim(validator.escape(req.params.agencia));
+    
+    contaController.buscarPorNumeroContaEAgencia((numeroConta, agenciaConta), (conta)=>{
+        res.json(conta);
+    });
+});
+
 app.get('/conta/historico/:numero', (req, res)=>{
 
     var numero = validator.trim(validator.escape(req.params.numero));

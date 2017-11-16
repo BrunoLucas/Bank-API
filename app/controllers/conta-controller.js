@@ -43,20 +43,25 @@ exports.depositar = (dadosConta, valor)=>{
         conta.data_criacao = new Date();
         conta.saldo = dadosConta.saldo;
       
-        buscarPorNumeroContaEAgencia(conta.numero, conta.agencia).then((contaAtualizada)=>{
-            resolve(contaAtualizada);
-        }).catch(error =>{
-            reject(error);
-        });
-    }) ;   
-
+        this.buscarPorNumeroContaEAgencia(conta.numero, conta.agencia).then((contaParaSerAtualizada)=>{
+                
+                contaParaSerAtualizada.saldo = contaParaSerAtualizada.saldo + valor;
+                contaParaSerAtualizada.save().then((contaAtualizada)=>{
+                        resolve(contaAtualizada);
+                }).catch(error =>{
+                    reject(error);
+                });
+            }).catch(error =>{
+                reject(error);
+            });
+        });   
 };
 
 exports.buscarPorNumeroContaEAgencia = (numeroConta,agencia) =>{
     
     return new Promise((resolve, reject)=>{
 
-        db.Conta.findOne().where("numero", numeroConta).and("agencia", agencia) .exec((function(error, conta){
+        db.Conta.findOne().where('numero', numeroConta).and('agencia', agencia) .exec((function(error, conta){
             if(error){
                 reject(error, 'Erro ao buscar historico de conta');
             }else{

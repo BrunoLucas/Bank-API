@@ -37,11 +37,13 @@ exports.transferir = function(contaRemetente, contaDestinatario, dadosTransferen
 };
 
 exports.depositar = function(contaRemetente, valorADepositar, callback){
-    contaController.buscarPorNumeroContaEAgencia(contaRemetente, valorADepositar,  function(resp){
-        if(!resp){
-            throw new Error('Conta do remetente nao encontrada');
-        }
-    });
+   
+   
+    // contaController.buscarPorNumeroContaEAgencia(contaRemetente, valorADepositar,  function(resp){
+    //     if(!resp){
+    //         throw new Error('Conta do remetente nao encontrada');
+    //     }
+    // });
 
     contaController.depositar(contaRemetente, valorADepositar, function(resp){
 
