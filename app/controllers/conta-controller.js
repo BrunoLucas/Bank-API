@@ -1,83 +1,70 @@
 var db = require('../db_config.js');
-exports.listar = function(callback){
-
-    db.Conta.find({}, function(error, conta){
-
-        if(error){
-            callback(error, 'Erro ao buscar');
-        }else{
-            callback(conta);
-        }
-    });
-};
-
-exports.salvar = (dadosConta, callback)=>{
+exports.listar = () =>{
+    db.Conta.find({}, (error, conta)=>{
     
-     
-    var conta = new db.Conta();
-    console.log('dadosConta ' + dadosConta);
-    console.log('numero: ' + dadosConta.numero);
-    conta.numero = dadosConta.numero;
-    conta.agencia = dadosConta.agencia;
-    conta.nome = dadosConta.nome;
-    conta.data_criacao = new Date();
-    conta.saldo = dadosConta.saldo;
-    console.log(conta.numero);
-    // callback('err');
+        return new Promise((resolve, reject)=>{
 
-    conta.save().then((contaCriada)=>{
-       callback(contaCriada);
-    }).error(msg=>{
-        callback(msg, 'Erro ao criar conta');
+            if(error){
+                reject(error, 'Erro ao buscar');
+            }else{
+                resolve(conta);
+            }
+        })   
     });
 };
 
-exports.depositar = (dadosConta, valor, callback)=>{
+exports.salvar = (dadosConta)=>{
     
-     
-    var conta = new db.Conta();
-    conta.numero = dadosConta.numero;
-    conta.agencia = dadosConta.agencia;
-    conta.nome = dadosConta.nome;
-    conta.data_criacao = new Date();
-    conta.saldo = dadosConta.saldo;
+    return new Promise((resolve, reject)=>{ 
+        var conta = new db.Conta();
+        conta.numero = dadosConta.numero;
+        conta.agencia = dadosConta.agencia;
+        conta.nome = dadosConta.nome;
+        conta.data_criacao = new Date();
+        conta.saldo = dadosConta.saldo;
 
-    console.log(conta.numero);
-    // callback('err');
+        conta.save().then((contaCriada)=>{
+            resolve(contaCriada);
+        }).error(msg=>{
+            reject(msg, 'Erro ao criar conta');
+        });
 
-    buscarPorNumeroContaEAgencia(conta.numer, conta.agencia, function(contaRetornada){
-        contaRetornada.save().then((contaAtualizada)=>{
-            callback(contaAtualizada);
-         }).error(msg=>{
-             callback(msg, 'Erro ao depostar em conta');
-         });
-    });
-
-   
-};
-
-exports.findById = function(id, callback){
-
-    console.log(id);    
-    db.Conta.findById(id, (error, conta)=>{
-        if(error){
-            callback(error, 'Erro ao buscar historico de conta');
-        }else{
-            callback(conta);
-        }
     });
 };
 
-exports.buscarPorNumeroContaEAgencia = function(numeroConta,agencia ,callback){
+exports.depositar = (dadosConta, valor)=>{
     
+    return new Promise((resolve, reject) =>{
+
+        var conta = new db.Conta();
+        conta.numero = dadosConta.numero;
+        conta.agencia = dadosConta.agencia;
+        conta.nome = dadosConta.nome;
+        conta.data_criacao = new Date();
+        conta.saldo = dadosConta.saldo;
+      
+        buscarPorNumeroContaEAgencia(conta.numero, conta.agencia).then((contaAtualizada)=>{
+            resolve(contaAtualizada);
+        }).catch(error =>{
+            reject(error);
+        });
+    }) ;   
+
+};
+
+exports.buscarPorNumeroContaEAgencia = (numeroConta,agencia) =>{
+    
+    return new Promise((resolve, reject)=>{
+
         db.Conta.findOne().where("numero", numeroConta).and("agencia", agencia) .exec((function(error, conta){
             if(error){
-                callback(error, 'Erro ao buscar historico de conta');
+                reject(error, 'Erro ao buscar historico de conta');
             }else{
-                callback(conta);
+                resolve(conta);
             }
         }));
-    };
+    });       
+};
 
 exports.obter = function(){
     

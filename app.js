@@ -8,7 +8,7 @@ app.get('/', function(req, res){
     console.log('rodando');
 });
 
-app.get('/conta', function(req, res){
+app.get('/conta/', function(req, res){
 
     contaController.listar(function(resp){
         res.json(resp);
@@ -16,14 +16,16 @@ app.get('/conta', function(req, res){
 });    
 
 // login na conta
-app.post('/conta/new', function(req, res){
+app.post('/conta/',(req, res) =>{
 
-    contaController.salvar(req.body, function(resp){
-        res.json(resp);
-    });
+    contaController.salvar(req.body).then(contaRetornada => {
+        res.status(201).json(contaRetornada);
+    }).catch(error =>{
+        res.status(500).json(error);
+    })
 });
 
-app.get('/conta/historico/:numero', function(req, res){
+app.get('/conta/historico/:numero', (req, res)=>{
 
     var numero = validator.trim(validator.escape(req.params.numero));
     contaController.buscarPorNumeroConta(numero, function(resp){
