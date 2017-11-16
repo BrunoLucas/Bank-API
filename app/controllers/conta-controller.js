@@ -11,7 +11,7 @@ exports.listar = function(callback){
     });
 };
 
-exports.salvar = function(dadosConta, callback){
+exports.salvar = (dadosConta, callback)=>{
     
      
     var conta = new db.Conta();
@@ -21,8 +21,10 @@ exports.salvar = function(dadosConta, callback){
     conta.agencia = dadosConta.agencia;
     conta.nome = dadosConta.nome;
     conta.data_criacao = new Date();
-
+    conta.saldo = dadosConta.saldo;
     console.log(conta.numero);
+    // callback('err');
+
     conta.save().then((contaCriada)=>{
        callback(contaCriada);
     }).error(msg=>{

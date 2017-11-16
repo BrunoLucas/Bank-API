@@ -1,10 +1,7 @@
 var request = require("request");
 
 describe("Teste de Conta Controller", function(){
-    
-    
-        var paciente;
-        var agendamentoDoRetorno;
+ 
         var contaController = require('../../app/controllers/conta-controller.js');
 
         it("Lista de contas não deve estar vazia", function(){
