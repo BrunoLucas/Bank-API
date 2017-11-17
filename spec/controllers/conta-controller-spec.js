@@ -35,22 +35,6 @@ describe("Teste de Conta Controller", function(){
             })
         });
 
-        it("Deve depositar em conta existente", function(){
-
-            const valorADepositar = 200.00;
-            const conta = criarConta();
-            contaController.depositar(conta, valorADepositar).then(resp=>{
-                expect(resp).toBeDefined();
-                expect(resp.numero).toEqual(conta.numero);
-                expect(resp.agencia).toEqual(conta.agencia);
-                expect(resp.nome).toEqual(conta.nome);
-                expect(resp.data_criacao).toEqual(conta.data_criacao);
-                expect(resp.saldo).toEqual(conta.saldo + valorADepositar);
-
-            }).catch(error=>{
-                fail('Erro ao realizar deposito ' + error);
-            });
-        });
 
         function criarConta(){
             conta = new Conta();

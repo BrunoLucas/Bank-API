@@ -8,10 +8,10 @@ var db = mongoose.connection;
 
 var Conta = require('./models/conta');
 
-var Transferencia = require('./models/transferencia');
+var Movimentacao = require('./models/movimentacao');
 
 db.on('error', console.error.bind(console, 'Erro ao conectar no banco'));
 
 exports.Conta = Conta;
 
-exports.Transferencia = Transferencia;
+exports.Movimentacao = Movimentacao;

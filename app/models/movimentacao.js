@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
  
-var TransferenciaSchema = new Schema({
+var MovimentacaoSchema = new Schema({
     id: Number,
     numero_conta_remetente: String,
     agencia_remetente: String,
@@ -12,4 +12,4 @@ var TransferenciaSchema = new Schema({
     valor_transferencia: Number
 });
  
-module.exports = mongoose.model('Transferencia', TransferenciaSchema);
+module.exports = mongoose.model('Movimentacao', MovimentacaoSchema);
