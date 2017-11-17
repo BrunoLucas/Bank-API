@@ -35,7 +35,6 @@ exports.transferir = function(contaRemetente, contaDestinatario, dadosTransferen
    transferencia.valor_transferencia = dadosTransferencia.valor_transferencia;
 
     transferencia.save().then((resultadoTransferencia)=>{
-        console.log('resultadoTransferencia ' + resultadoTransferencia);
         callback(resultadoTransferencia);
     }).error(error =>{
         callback(error);
@@ -44,32 +43,32 @@ exports.transferir = function(contaRemetente, contaDestinatario, dadosTransferen
 
 };
 
-exports.depositar = function(contaRemetente, valorADepositar, callback){
-    contaController.buscarPorNumeroContaEAgencia(contaRemetente, valorADepositar,  function(resp){
-        if(!resp){
-            throw new Error('Conta do remetente nao encontrada');
-        }
+exports.depositar = (contaRemetente, valorADepositar)=>{
+
+    return new Promise((resolve, reject)=>{        
+        contaController.buscarPorNumeroContaEAgencia(contaRemetente.numero,contaRemetente.agencia).catch(error=>{
+            reject('Conta do remetente nao encontrada');
+        });       
+        contaController.depositar(contaRemetente, valorADepositar).catch(error=>{
+            reject('Erro ao realizar deposito ' + error);
+        });
+   
+        var transferencia = new db.Transferencia();
+        transferencia.tipo_transferencia = 'DEP';
+        transferencia.numero_conta_destinatario = contaRemetente.numero;
+        transferencia.numero_conta_remetente = contaRemetente.numero;
+        transferencia.agencia_remetente = contaRemetente.agencia;
+        transferencia.agencia_destinatario = contaRemetente.agencia;
+        transferencia.valor_transferencia = valorADepositar;
+    
+        transferencia.save().then((resultadoTransferencia)=>{
+            resolve(transferencia);
+        }).error(error =>{
+            reject(error);
+        });
+
     });
 
-    contaController.depositar((contaRemetente, valorADepositar)).then(resp=>{
-
-    }).catch(error=>{
-        throw new Error('Erro ao realizar deposito');
-    });
-
-    var transferencia = new db.Transferencia();
-    transferencia.tipo_transferencia = 'DEP';
-    transferencia.numero_conta_destinatario = contaRemetente.numero;
-    transferencia.numero_conta_remetente = contaRemetente.numero;
-    transferencia.agencia_remetente = contaRemetente.agencia;
-    transferencia.agencia_destinatario = contaRemetente.agencia;
-    transferencia.valor_transferencia = valorADepositar;
-
-    transferencia.save().then((resultadoTransferencia)=>{
-        callback(transferencia);
-    }).error(error =>{
-        callback(error);
-    });
 
 
 };

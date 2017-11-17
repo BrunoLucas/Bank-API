@@ -8,16 +8,30 @@ app.get('/', function(req, res){
     console.log('rodando');
 });
 
-app.get('/conta/', function(req, res){
+app.get('/conta', function(req, res){
 
-    contaController.listar(function(resp){
-        res.json(resp);
+    contaController.listar(()=>{
+        
+    }).then(resp=>{
+        res.status(200).json(resp);
+    }).catch(error=>{
+        res.status(500).json(error);
     });
-});    
+}); 
+
+app.get('/conta/:conta/agencia/:agencia', function(req, res){
+    
+        var conta = req.params.conta;
+        var agencia = req.params.agencia;
+        contaController.buscarPorNumeroContaEAgencia(conta, agencia).then(resp=>{
+            res.status(200).json(resp);
+        }).catch(error=>{
+            res.status(500).json(error);
+        });
+    }); 
 
 // login na conta
-app.post('/conta/',(req, res) =>{
-
+app.post('/conta',(req, res) =>{
     contaController.salvar(req.body).then(contaRetornada => {
         res.status(201).json(contaRetornada);
     }).catch(error =>{

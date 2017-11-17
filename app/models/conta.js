@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
  
 var ContaSchema = new Schema({
     id: Number,
-    numero: String,
+    numero: Number,
     agencia: String,
     nome: String,
     data_criacao: Date,

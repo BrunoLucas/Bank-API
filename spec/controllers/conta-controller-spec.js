@@ -17,10 +17,9 @@ describe("Teste de Conta Controller", function(){
         });
 
         it("Deve retornar uma conta pelo numero e agencia", function(){
-            contaController.buscarPorNumeroContaEAgencia((123456,1803)).then(resp=>{
-                console.log(resp);
+            contaController.buscarPorNumeroContaEAgencia(123456,1803).then(resp=>{
                 expect(resp.numero).toEqual(123456);
-                expect(resp.agencia).toEqual(1803);
+                expect(resp.agencia).toEqual('1803');
             }).catch(error=>{
                 fail('erro em retornar conta pelo numero e agencia ' + error);
             })
@@ -28,7 +27,6 @@ describe("Teste de Conta Controller", function(){
 
         it("Não deve encontrar uma conta inexistente", function(){
             contaController.buscarPorNumeroContaEAgencia((1, 1803)).then(resp=>{
-                console.log('resp' + resp);
                 expect(resp).toBeNull();
             }).catch(error=>{
                 fail('erro em buscar conta inexistente ' + error);
@@ -37,7 +35,7 @@ describe("Teste de Conta Controller", function(){
 
         it("Deve depositar em conta existente", function(){
             // TODO 
-            throw new Error('ainda nao implementado');
+            fail('ainda nao implementado');
         });
 
     });

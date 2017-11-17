@@ -29,7 +29,6 @@ describe("Teste de Transferencia Controller", function(){
         it("Deve adicionar 100 para conta existente", function(){
 
             transferenciaController.transferir(conta1, conta2,transferencia, function(resp){
-                    console.log(resp);
                     expect(resp).toBeDefined();
                     expect(resp.numero_conta_remetente) .toEqual( transferencia.numero_conta_remetente);
                     expect(resp.agencia_remetente) .toEqual(transferencia.agencia_remetente);
@@ -44,22 +43,23 @@ describe("Teste de Transferencia Controller", function(){
             
         });
 
-        fit("Deve depositar 90 para conta existente", function(){
-            
-                        transferencia.tipo_transferencia = 'DEP';
-                        transferenciaController.depositar(conta1,transferencia, function(resp){
-
-                    
+        it("Deve depositar 90 para conta existente", function(){
+                            transferencia.tipo_transferencia = 'DEP';
+                            const valor_transferencia = transferencia.valor_transferencia;
+                            conta1.numero = 123456;
+                            conta1.agencia = '1803';
+                            transferenciaController.depositar(conta1, valor_transferencia).then( (resp)=>{
                                 expect(resp).toBeDefined();
                                 expect(resp.numero_conta_remetente) .toEqual( transferencia.numero_conta_remetente);
                                 expect(resp.agencia_remetente) .toEqual(transferencia.agencia_remetente);
                                 expect(conta1.saldo +  transferencia.valor_transferencia) .toEqual(conta1.saldo + 90.00);
-        
                                 expect(resp.tipo_transferencia).toEqual('DEP');
-            
+                        }).catch(error=>{
+                            fail('Erro em deve depositar 90 para conta existente ' + error);
                         });
                         
-                    });
+        });
+
     });
 
     function criarConta() {
