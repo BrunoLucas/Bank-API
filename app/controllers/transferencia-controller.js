@@ -13,34 +13,30 @@ exports.listar = function(callback){
     });
 };
 
-exports.transferir = function(contaRemetente, contaDestinatario, dadosTransferencia, callback){
+exports.transferir = (contaRemetente, contaDestinatario, dadosTransferencia)=>{
 
-    contaController.buscarPorNumeroContaEAgencia(contaRemetente.numero, contaRemetente.agencia, function(resp){
-        if(!resp){
-            throw new Error('Conta do remetente nao encontrada');
-        }
+    return new Promise((resolve, reject)=>{
+        contaController.buscarPorNumeroContaEAgencia(contaRemetente.numero, contaRemetente.agencia).catch(error=>{
+            reject('Conta do remetente nao encontrada');
+        });
+        contaController.buscarPorNumeroContaEAgencia(contaDestinatario.numero, contaDestinatario.agencia).catch(error=>{
+            reject('Conta do destinatario nao encontrada');
+        });
+        
+        var transferencia = new db.Transferencia();
+        transferencia.tipo_transferencia = dadosTransferencia.tipo_transferencia;
+        transferencia.numero_conta_destinatario = dadosTransferencia.numero_conta_destinatario;
+        transferencia.numero_conta_remetente = dadosTransferencia.numero_conta_remetente;
+        transferencia.agencia_remetente = dadosTransferencia.agencia_remetente;
+        transferencia.agencia_destinatario = dadosTransferencia.agencia_destinatario;
+        transferencia.valor_transferencia = dadosTransferencia.valor_transferencia;
+ 
+        transferencia.save().then((resultadoTransferencia)=>{
+             resolve(resultadoTransferencia);
+         }).error(error =>{
+             reject(error);
+         });
     });
-    contaController.buscarPorNumeroContaEAgencia(contaDestinatario.numero, contaDestinatario.agencia, function(resp){
-        if(!resp){
-            throw new Error('Conta do destinatario nao encontrada');
-        }
-    });
-
-   var transferencia = new db.Transferencia();
-   transferencia.tipo_transferencia = dadosTransferencia.tipo_transferencia;
-   transferencia.numero_conta_destinatario = dadosTransferencia.numero_conta_destinatario;
-   transferencia.numero_conta_remetente = dadosTransferencia.numero_conta_remetente;
-   transferencia.agencia_remetente = dadosTransferencia.agencia_remetente;
-   transferencia.agencia_destinatario = dadosTransferencia.agencia_destinatario;
-   transferencia.valor_transferencia = dadosTransferencia.valor_transferencia;
-
-    transferencia.save().then((resultadoTransferencia)=>{
-        callback(resultadoTransferencia);
-    }).error(error =>{
-        callback(error);
-    });
-
-
 };
 
 exports.depositar = (contaRemetente, valorADepositar)=>{

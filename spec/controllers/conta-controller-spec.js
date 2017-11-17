@@ -2,6 +2,8 @@
 
 var request = require("request");
 
+var Conta = require('../../app/models/conta.js');
+
 describe("Teste de Conta Controller", function(){
  
         var contaController = require('../../app/controllers/conta-controller.js');
@@ -26,7 +28,7 @@ describe("Teste de Conta Controller", function(){
         });
 
         it("Não deve encontrar uma conta inexistente", function(){
-            contaController.buscarPorNumeroContaEAgencia((1, 1803)).then(resp=>{
+            contaController.buscarPorNumeroContaEAgencia(1, 1803).then(resp=>{
                 expect(resp).toBeNull();
             }).catch(error=>{
                 fail('erro em buscar conta inexistente ' + error);
@@ -34,8 +36,29 @@ describe("Teste de Conta Controller", function(){
         });
 
         it("Deve depositar em conta existente", function(){
-            // TODO 
-            fail('ainda nao implementado');
+
+            const valorADepositar = 200.00;
+            const conta = criarConta();
+            contaController.depositar(conta, valorADepositar).then(resp=>{
+                expect(resp).toBeDefined();
+                expect(resp.numero).toEqual(conta.numero);
+                expect(resp.agencia).toEqual(conta.agencia);
+                expect(resp.nome).toEqual(conta.nome);
+                expect(resp.data_criacao).toEqual(conta.data_criacao);
+                expect(resp.saldo).toEqual(conta.saldo + valorADepositar);
+
+            }).catch(error=>{
+                fail('Erro ao realizar deposito ' + error);
+            });
         });
 
+        function criarConta(){
+            conta = new Conta();
+            conta.numero = 123456;
+            conta.agencia = '1803';
+            conta.nome = 'Conta Teste 1';
+            conta.saldo = 300.00;
+            conta.data_criacao = new Date();
+            return conta;
+        }
     });
