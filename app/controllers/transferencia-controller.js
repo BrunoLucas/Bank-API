@@ -27,8 +27,16 @@ exports.transferir = function(contaRemetente, contaDestinatario, dadosTransferen
     });
 
    var transferencia = new db.Transferencia();
+   transferencia.tipo_transferencia = dadosTransferencia.tipo_transferencia;
+   transferencia.numero_conta_destinatario = dadosTransferencia.numero_conta_destinatario;
+   transferencia.numero_conta_remetente = dadosTransferencia.numero_conta_remetente;
+   transferencia.agencia_remetente = dadosTransferencia.agencia_remetente;
+   transferencia.agencia_destinatario = dadosTransferencia.agencia_destinatario;
+   transferencia.valor_transferencia = dadosTransferencia.valor_transferencia;
+
     transferencia.save().then((resultadoTransferencia)=>{
-        callback(transferencia);
+        console.log('resultadoTransferencia ' + resultadoTransferencia);
+        callback(resultadoTransferencia);
     }).error(error =>{
         callback(error);
     });
@@ -43,11 +51,20 @@ exports.depositar = function(contaRemetente, valorADepositar, callback){
         }
     });
 
-    contaController.depositar(contaRemetente, valorADepositar, function(resp){
+    contaController.depositar((contaRemetente, valorADepositar)).then(resp=>{
 
+    }).catch(error=>{
+        throw new Error('Erro ao realizar deposito');
     });
 
     var transferencia = new db.Transferencia();
+    transferencia.tipo_transferencia = 'DEP';
+    transferencia.numero_conta_destinatario = contaRemetente.numero;
+    transferencia.numero_conta_remetente = contaRemetente.numero;
+    transferencia.agencia_remetente = contaRemetente.agencia;
+    transferencia.agencia_destinatario = contaRemetente.agencia;
+    transferencia.valor_transferencia = valorADepositar;
+
     transferencia.save().then((resultadoTransferencia)=>{
         callback(transferencia);
     }).error(error =>{

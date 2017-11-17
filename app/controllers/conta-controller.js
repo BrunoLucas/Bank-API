@@ -1,15 +1,15 @@
 var db = require('../db_config.js');
 exports.listar = () =>{
-    db.Conta.find({}, (error, conta)=>{
-    
-        return new Promise((resolve, reject)=>{
 
+    return new Promise((resolve, reject)=>{
+
+        db.Conta.find({}, (error, conta)=>{
             if(error){
                 reject(error, 'Erro ao buscar');
             }else{
                 resolve(conta);
             }
-        })   
+        });   
     });
 };
 
@@ -43,7 +43,7 @@ exports.depositar = (dadosConta, valor)=>{
         conta.data_criacao = new Date();
         conta.saldo = dadosConta.saldo;
       
-        buscarPorNumeroContaEAgencia(conta.numero, conta.agencia).then((contaAtualizada)=>{
+        this.buscarPorNumeroContaEAgencia(conta.numero, conta.agencia).then((contaAtualizada)=>{
             resolve(contaAtualizada);
         }).catch(error =>{
             reject(error);
@@ -56,8 +56,9 @@ exports.buscarPorNumeroContaEAgencia = (numeroConta,agencia) =>{
     
     return new Promise((resolve, reject)=>{
 
-        db.Conta.findOne().where("numero", numeroConta).and("agencia", agencia) .exec((function(error, conta){
+        db.Conta.findOne({numero : numeroConta, agencia : agencia}).exec((function(error, conta){
             if(error){
+                console.log('erro ' + error);
                 reject(error, 'Erro ao buscar historico de conta');
             }else{
                 resolve(conta);

@@ -29,7 +29,7 @@ describe("Teste de Transferencia Controller", function(){
         it("Deve adicionar 100 para conta existente", function(){
 
             transferenciaController.transferir(conta1, conta2,transferencia, function(resp){
-                
+                    console.log(resp);
                     expect(resp).toBeDefined();
                     expect(resp.numero_conta_remetente) .toEqual( transferencia.numero_conta_remetente);
                     expect(resp.agencia_remetente) .toEqual(transferencia.agencia_remetente);
@@ -44,7 +44,7 @@ describe("Teste de Transferencia Controller", function(){
             
         });
 
-        it("Deve depositar 90 para conta existente", function(){
+        fit("Deve depositar 90 para conta existente", function(){
             
                         transferencia.tipo_transferencia = 'DEP';
                         transferenciaController.depositar(conta1,transferencia, function(resp){
