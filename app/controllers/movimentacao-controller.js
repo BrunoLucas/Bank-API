@@ -13,30 +13,67 @@ exports.listar = function(callback){
     });
 };
 
-exports.transferir = (contaRemetente, contaDestinatario, dadosMovimentacao)=>{
+exports.transferir = (( dadosMovimentacao)=>{
 
     return new Promise((resolve, reject)=>{
-        contaController.buscarPorNumeroContaEAgencia(contaRemetente.numero, contaRemetente.agencia).catch(error=>{
-            reject('Conta do remetente nao encontrada');
+        let saldoAtualRemetente;
+        Promise.all([
+            obterDadosConta(dadosMovimentacao.numero_conta_remetente, dadosMovimentacao.agencia_remetente),
+            obterDadosConta(dadosMovimentacao.numero_conta_destinatario, dadosMovimentacao.agencia_destinatario)
+            ]).then(res=>{
+                let saldoAtualRemetente = res[0].saldo;
+                enviarMovimento(dadosMovimentacao, saldoAtualRemetente).then(res=>{
+                    resolve(res);
+                }).catch(error =>{
+                    reject(error);
+                });
+            }).catch(error=>{ 
+                console.log('errorr ' + error);
+                reject(error);
+            });
         });
-        contaController.buscarPorNumeroContaEAgencia(contaDestinatario.numero, contaDestinatario.agencia).catch(error=>{
-            reject('Conta do destinatario nao encontrada');
-        });
+   
+ 
+
+    function obterDadosConta(numero, agencia){
+        return new Promise((resolve, reject)=>{
+   
+           contaController.buscarPorNumeroContaEAgencia(numero, agencia).then(conta=>{
+               if(!conta){
+                   throw new Error('Conta: '+ numero + ' Agencia: '+ agencia);
+               }
+              resolve(conta);
+           }).catch(error=>{
+               reject('Conta do remetente nao encontrada' + error);
+           });
+        }).catch(error=>{
+            throw new Error(error);
+        });;
+    }
+
+    function enviarMovimento(dadosMovimentacao, saldoDisponivel){
         
-        var movimentacao = new db.Movimentacao();
-        movimentacao.numero_conta_destinatario = dadosMovimentacao.numero_conta_destinatario;
-        movimentacao.numero_conta_remetente = dadosMovimentacao.numero_conta_remetente;
-        movimentacao.agencia_remetente = dadosMovimentacao.agencia_remetente;
-        movimentacao.agencia_destinatario = dadosMovimentacao.agencia_destinatario;
-        movimentacao.valor_movimentacao = dadosMovimentacao.valor_movimentacao;
-        movimentacao.tipo_movimentacao = 'ADD';
-        movimentacao.save().then((resultadomovimentacao)=>{
-             resolve(resultadomovimentacao);
-         }).error(error =>{
-             reject(error);
-         });
-    });
-};
+        return new Promise((resolve, reject)=>{
+            if(saldoDisponivel < dadosMovimentacao.valor_movimentacao){
+                throw new Error('Saldo insuficiente');
+            }
+           var movimentacao = new db.Movimentacao();
+           movimentacao.numero_conta_destinatario = dadosMovimentacao.numero_conta_destinatario;
+           movimentacao.numero_conta_remetente = dadosMovimentacao.numero_conta_remetente;
+           movimentacao.agencia_remetente = dadosMovimentacao.agencia_remetente;
+           movimentacao.agencia_destinatario = dadosMovimentacao.agencia_destinatario;
+           movimentacao.valor_movimentacao = dadosMovimentacao.valor_movimentacao;
+           movimentacao.tipo_movimentacao = 'ADD';
+           movimentacao.save().then((resultadomovimentacao)=>{
+                resolve(resultadomovimentacao);
+            }).error(error =>{
+                reject(error);
+            });
+        }).catch(error =>{
+            throw (error);
+        });
+    }
+});
 
 exports.depositar = (contaRemetente, valorADepositar)=>{
 
@@ -64,7 +101,5 @@ exports.depositar = (contaRemetente, valorADepositar)=>{
 
     });
 
-
-
 };
-    
+   

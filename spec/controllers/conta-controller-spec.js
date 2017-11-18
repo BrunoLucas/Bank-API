@@ -1,14 +1,14 @@
-// import { fail } from "assert";
+// import { fail } from 'assert';
 
-var request = require("request");
+var request = require('request');
 
 var Conta = require('../../app/models/conta.js');
 
-describe("Teste de Conta Controller", function(){
+describe('Teste de Conta Controller', function(){
  
         var contaController = require('../../app/controllers/conta-controller.js');
 
-        it("Lista de contas não deve estar vazia", function(){
+        it('Lista de contas não deve estar vazia', function(){
             contaController.listar(() =>{
             }).then(resp =>{
                 expect(resp.length).toBeGreaterThan(0); 
@@ -18,8 +18,8 @@ describe("Teste de Conta Controller", function(){
             
         });
 
-        it("Deve retornar uma conta pelo numero e agencia", function(){
-            contaController.buscarPorNumeroContaEAgencia(123456,'1803').then(resp=>{
+        it('Deve retornar uma conta pelo numero e agencia', function(){
+            contaController.buscarPorNumeroContaEAgencia(123456,"1803").then(resp=>{
                 expect(resp.numero).toEqual(123456);
                 expect(resp.agencia).toEqual('1803');
             }).catch(error=>{
@@ -27,7 +27,7 @@ describe("Teste de Conta Controller", function(){
             })
         });
 
-        it("Não deve encontrar uma conta inexistente", function(){
+        it('Não deve encontrar uma conta inexistente', function(){
             contaController.buscarPorNumeroContaEAgencia(1, 1803).then(resp=>{
                 expect(resp).toBeNull();
             }).catch(error=>{

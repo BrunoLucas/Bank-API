@@ -1,9 +1,9 @@
-var request = require("request");
+var request = require('request');
 var movimentacaoController = require('../../app/controllers/movimentacao-controller.js');
 var Conta = require('../../app/models/conta.js');
 var Movimentacao = require('../../app/models/movimentacao.js');
 
-describe("Teste de Movimentacao Controller", function(){
+describe('Teste de Movimentacao Controller', function(){
   
     var conta1;
     var conta2;
@@ -21,14 +21,16 @@ describe("Teste de Movimentacao Controller", function(){
             conta2.saldo = 100.00;
             conta2.data_criacao = new Date();
 
-            movimentacao = criarTransferencia(conta1, conta2,100.00);
+            movimentacao = criarTransferencia(conta1, conta2, 100.00);
 
         });
 
       
-        it("Deve transferir 100 para entre contas existentes", function(){
+        it('Deve transferir 100 para entre contas existentes', function(){
 
-            movimentacaoController.transferir(conta1, conta2, movimentacao).then(resp=>{
+            movimentacaoController.transferir(movimentacao).then(resp=>{
+                
+                movimentacao.valor_movimentacao = 100.00;
                     expect(resp).toBeDefined();
                     expect(resp.numero_conta_remetente) .toEqual( movimentacao.numero_conta_remetente);
                     expect(resp.agencia_remetente) .toEqual(movimentacao.agencia_remetente);
@@ -44,7 +46,7 @@ describe("Teste de Movimentacao Controller", function(){
             
         });
 
-        it("Deve depositar 90 para conta existente", function(){
+        it('Deve depositar 90 para conta existente', function(){
                         movimentacao.tipo_transferencia = 'DEP';
                         const valor_movimentacao = 90.00;
                         conta1.numero = 123456;
@@ -62,10 +64,8 @@ describe("Teste de Movimentacao Controller", function(){
         });
 
         it('Deve retornar historico de transferencias para numero e agencia', function(){
-                let conta1 = criarConta();
-                let conta2 = criarConta();
-                conta2.numero = 1234567;
-                conta2.agencia = '1800';
+                conta2.numero = 123465;
+                conta2.agencia = '1803';
                 conta2.saldo = 500.00;
 
 
@@ -73,12 +73,24 @@ describe("Teste de Movimentacao Controller", function(){
                 let transferencia2 = criarTransferencia(conta2, conta1, 100.00);
                 let transferencia3 = criarDeposito(conta2, 200.00);
 
-                movimentacaoController.transferir(conta1, conta2, transferencia1).then(resp=>{
+                movimentacaoController.transferir(transferencia1).then(resp=>{
                     expect(resp).toBeDefined();
                 }).catch(error=>{
                     fail('Erro ao realizar transferencia ' + error);
-                })
+                });
                 
+
+        });
+
+        it('Deve ocorrer erro ao tentar transferir uma quantia maior que o saldo do remetente', function(){
+
+                movimentacao.valor_movimentacao = 6000.00;
+                movimentacaoController.transferir(movimentacao).then(resp=>{
+                    fail('não deve conseguir realizar a transferência ' + resp);
+                }).catch(error =>{
+                    expect(error).toBeDefined();
+                    expect(error).toEqual('Saldo insuficiente');
+                })
 
         });
 
