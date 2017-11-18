@@ -24,13 +24,12 @@ exports.transferir = (contaRemetente, contaDestinatario, dadosMovimentacao)=>{
         });
         
         var movimentacao = new db.Movimentacao();
-        movimentacao.tipo_movimentacao = dadosMovimentacao.tipo_movimentacao;
         movimentacao.numero_conta_destinatario = dadosMovimentacao.numero_conta_destinatario;
         movimentacao.numero_conta_remetente = dadosMovimentacao.numero_conta_remetente;
         movimentacao.agencia_remetente = dadosMovimentacao.agencia_remetente;
         movimentacao.agencia_destinatario = dadosMovimentacao.agencia_destinatario;
         movimentacao.valor_movimentacao = dadosMovimentacao.valor_movimentacao;
- 
+        movimentacao.tipo_movimentacao = 'ADD';
         movimentacao.save().then((resultadomovimentacao)=>{
              resolve(resultadomovimentacao);
          }).error(error =>{

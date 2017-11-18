@@ -52,8 +52,10 @@ exports.depositar = (dadosConta, valor)=>{
 };
 
 exports.buscarPorNumeroContaEAgencia = (numeroConta=0,agencia='') =>{
-    return new Promise((resolve, reject)=>{
+ 
+    return new Promise((resolve, reject)=>{ 
         db.Conta.findOne({numero : numeroConta, agencia : agencia}).exec((function(error, conta){
+
             if(error){
                 reject(error, 'Erro ao buscar conta e agencia');
             }else{

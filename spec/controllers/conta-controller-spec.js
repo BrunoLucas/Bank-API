@@ -19,7 +19,7 @@ describe("Teste de Conta Controller", function(){
         });
 
         it("Deve retornar uma conta pelo numero e agencia", function(){
-            contaController.buscarPorNumeroContaEAgencia(123456,1803).then(resp=>{
+            contaController.buscarPorNumeroContaEAgencia(123456,'1803').then(resp=>{
                 expect(resp.numero).toEqual(123456);
                 expect(resp.agencia).toEqual('1803');
             }).catch(error=>{

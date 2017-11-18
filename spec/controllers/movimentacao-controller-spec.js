@@ -28,32 +28,33 @@ describe("Teste de Movimentacao Controller", function(){
       
         it("Deve transferir 100 para entre contas existentes", function(){
 
-            movimentacaoController.transferir(conta1, conta2,movimentacao, function(resp){
+            movimentacaoController.transferir(conta1, conta2, movimentacao).then(resp=>{
                     expect(resp).toBeDefined();
                     expect(resp.numero_conta_remetente) .toEqual( movimentacao.numero_conta_remetente);
                     expect(resp.agencia_remetente) .toEqual(movimentacao.agencia_remetente);
-                    expect(conta1.saldo -  movimentacao.valor_transferencia) .toEqual(conta1.saldo - 100.00);
-
+                    expect(conta1.saldo -  movimentacao.valor_movimentacao) .toEqual(conta1.saldo - 100.00);
                     expect(resp.numero_conta_destinatario) .toEqual( movimentacao.numero_conta_destinatario);
                     expect(resp.agencia_destinatario) .toEqual(movimentacao.agencia_destinatario);
-                    expect(conta2.saldo +  movimentacao.valor_transferencia) .toEqual(conta2.saldo + 100.00);
-                    expect(resp.tipo_transferencia).toEqual('ADD');
+                    expect(conta2.saldo +  movimentacao.valor_movimentacao).toEqual(conta2.saldo + 100.00);
+                    expect(resp.tipo_movimentacao).toEqual('ADD');
 
+            }).catch(error=>{
+                    fail('Erro ao transferir 100 entre contas existentes '+error);
             });
             
         });
 
         it("Deve depositar 90 para conta existente", function(){
                         movimentacao.tipo_transferencia = 'DEP';
-                        const valor_transferencia = movimentacao.valor_transferencia;
+                        const valor_movimentacao = 90.00;
                         conta1.numero = 123456;
                         conta1.agencia = '1803';
-                        movimentacaoController.depositar(conta1, valor_transferencia).then( (resp)=>{
+                        movimentacaoController.depositar(conta1, valor_movimentacao).then( (resp)=>{
                             expect(resp).toBeDefined();
                             expect(resp.numero_conta_remetente) .toEqual( movimentacao.numero_conta_remetente);
                             expect(resp.agencia_remetente) .toEqual(movimentacao.agencia_remetente);
-                            expect(conta1.saldo +  movimentacao.valor_transferencia) .toEqual(conta1.saldo + 90.00);
-                            expect(resp.tipo_transferencia).toEqual('DEP');
+                            expect(conta1.saldo +  valor_movimentacao) .toEqual(conta1.saldo + 90.00);
+                            expect(resp.tipo_movimentacao).toEqual('DEP');
                     }).catch(error=>{
                         fail('Erro em deve depositar 90 para conta existente ' + error);
                     });
@@ -96,12 +97,12 @@ describe("Teste de Movimentacao Controller", function(){
     function criarTransferencia(contaRemetente, contaDestinatario, valorTransferencia){
         
         movimentacao = new Movimentacao();
-        movimentacao.valor_transferencia = valorTransferencia;
+        movimentacao.valor_movimentacao = valorTransferencia;
         movimentacao.numero_conta_remetente = contaRemetente.numero;
         movimentacao.agencia_remetente = contaRemetente.agencia;
         movimentacao.agencia_destinatario = contaDestinatario.agencia;
         movimentacao.numero_conta_destinatario = contaDestinatario.numero;
-        movimentacao.tipo_transferencia = 'ADD';
+        movimentacao.tipo_movimentacao = 'ADD';
         
         return movimentacao;
     }
@@ -109,12 +110,12 @@ describe("Teste de Movimentacao Controller", function(){
     function criarDeposito(conta, valor){
         
         movimentacao = new Movimentacao();
-        movimentacao.valor_transferencia = valor;
+        movimentacao.valor_movimentacao = valor;
         movimentacao.numero_conta_remetente = conta.numero;
         movimentacao.agencia_remetente = conta.agencia;
         movimentacao.agencia_destinatario = conta.agencia;
         movimentacao.numero_conta_destinatario = conta.numero;
-        movimentacao.tipo_transferencia = 'DEP';
+        movimentacao.tipo_movimentacao = 'DEP';
         
         return movimentacao;
     }
