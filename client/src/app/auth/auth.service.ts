@@ -28,9 +28,15 @@ export class AuthService {
       this.authenticated = false;
     }
   }
+  //http://localhost:5000/conta/${numero}/agencia/${agencia}/historico
 
    signIn(conta: Conta) {
-    return this._http.get(`http://localhost:5000/conta/${conta.numero}/agencia/${conta.agencia}`)
+     let info ={
+        conta: conta.numero,
+        agencia: conta.agencia
+     };
+
+    return this._http.post(`http://localhost:5000/api/v1/login`, info)
                 .map((res: Response) => res.json())
                  .subscribe(contaRetornada => {
                         console.log('CONTA ' + contaRetornada);
@@ -44,6 +50,12 @@ export class AuthService {
                     this.authenticated = false;
                 });
   }
+
+  obterHistoricoDeConta(numero, agencia) {
+    return this._http.get(`http://localhost:5000/api/v1/conta/${numero}/agencia/${agencia}/historico`)
+                .map((res: Response) => res.json());
+  }
+
 
   logout() {
     this.authenticated = false;

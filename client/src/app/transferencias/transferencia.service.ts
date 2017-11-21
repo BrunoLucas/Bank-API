@@ -17,10 +17,20 @@ export class TransferenciaService {
 
   constructor(private http: Http) { }
 
-  obterHistoricoDeConta(numero, agencia) {
-    return this.http.get(`http://localhost:5000/conta/${numero}/agencia/${agencia}/historico`)
-    .map(response => response.json().data);
-  }
+  // obterHistoricoDeConta(numero, agencia) {
+  //   return this.http.get(`http://localhost:5000/conta/${numero}/agencia/${agencia}/historico`)
+  //   .map(response => response.json().data);
+  // }
+
+  
+  obterHistoricoDeConta(numero, agencia):Observable<Transferencia[]> {
+    return this.http.get(`http://localhost:5000/api/v1/conta/${numero}/agencia/${agencia}/historico`)
+                .map((res: Response) => res.json().data)
+                .catch(this.handleError);
+
+    }
+
+  
 
   getAll(): Observable<Transferencia[]> {
     return this.http.get(this.url)

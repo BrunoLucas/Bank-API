@@ -13,7 +13,7 @@ app.get('/', function(req, res){
     console.log('rodando');
 });
 
-app.get('/conta', function(req, res){
+app.get('/api/v1/conta', function(req, res){
 
     contaController.listar(()=>{
         
@@ -24,7 +24,7 @@ app.get('/conta', function(req, res){
     });
 }); 
 
-app.get('/conta/:conta/agencia/:agencia', function(req, res){
+app.get('/api/v1/conta/:conta/agencia/:agencia', function(req, res){
     
         var conta = parseInt(req.params.conta);
         var agencia = req.params.agencia;
@@ -37,7 +37,7 @@ app.get('/conta/:conta/agencia/:agencia', function(req, res){
 
     
 
-app.post('/conta',(req, res) =>{
+app.post('/api/v1/conta',(req, res) =>{
     contaController.salvar(req.body).then(contaRetornada => {
         res.status(201).json(contaRetornada);
     }).catch(error =>{
@@ -45,9 +45,10 @@ app.post('/conta',(req, res) =>{
     })
 });
 
-app.post('/conta/login',(req, res) =>{
-    var conta = parseInt(req.params.conta);
-    var agencia = req.params.agencia;
+app.post('/api/v1/login',(req, res) =>{
+    console.log(req.body);
+    var conta = parseInt(req.body.conta);
+    var agencia = req.body.agencia;
     contaController.buscarPorNumeroContaEAgencia(conta, agencia).then(contaRetornada => {
         res.status(200).json(contaRetornada);
     }).catch(error =>{
@@ -56,15 +57,8 @@ app.post('/conta/login',(req, res) =>{
 });
 
 
-app.get('/conta/historico/:numero', (req, res)=>{
 
-    var numero = validator.trim(validator.escape(req.params.numero));
-    contaController.buscarPorNumeroConta(numero, function(resp){
-        res.json(resp);
-    });
-});
-
-app.get('/conta/:numero/agencia/:agencia/historico', (req, res)=>{
+app.get('/api/v1/conta/:numero/agencia/:agencia/historico', (req, res)=>{
 
     var numero = validator.trim(validator.escape(req.params.numero));
     var agencia = validator.trim(validator.escape(req.params.agencia));
@@ -75,7 +69,7 @@ app.get('/conta/:numero/agencia/:agencia/historico', (req, res)=>{
     })
 });
 
-app.post('/conta/transfer', (req, res)=>{
+app.post('/api/v1/conta/transfer', (req, res)=>{
     var movimentacao = new Movimentacao();
     movimentacao.numero_conta_remetente = validator.trim(validator.escape(req.body.numero_remetente));
     movimentacao.agencia_remetente = validator.trim(validator.escape(req.body.agencia_remetente));
@@ -90,9 +84,3 @@ app.post('/conta/transfer', (req, res)=>{
     })
     
 });
-
-
-
-
-
-

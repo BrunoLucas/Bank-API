@@ -7,7 +7,7 @@ describe('Teste de App', function() {
         describe('GET /conta', function() {
             
             it('returns status code 200', function() {
-                request.get(base_url + '/conta', function(error, response, body) {
+                request.get(base_url + '/api/v1/conta', function(error, response, body) {
                 expect(response.statusCode).toBe(200);
                 });
             });
