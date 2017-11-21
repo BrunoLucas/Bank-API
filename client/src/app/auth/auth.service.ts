@@ -39,7 +39,6 @@ export class AuthService {
     return this._http.post(`http://localhost:5000/api/v1/login`, info)
                 .map((res: Response) => res.json())
                  .subscribe(contaRetornada => {
-                        console.log('CONTA ' + contaRetornada);
                         this.authenticated = true;
                         this.showNavBar(true);
                         this.router.navigate(['/']);
@@ -55,8 +54,6 @@ export class AuthService {
     return this._http.get(`http://localhost:5000/api/v1/conta/${numero}/agencia/${agencia}/historico`)
                 .map((res: Response) => res.json());
   }
-
-
   logout() {
     this.authenticated = false;
     this.showNavBar(false);

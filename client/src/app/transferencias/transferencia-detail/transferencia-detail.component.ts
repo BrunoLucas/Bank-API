@@ -23,7 +23,6 @@ export class TransferenciaDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.params.subscribe(
       (params: any) => {
-        console.log('Params ' +  params);
         this.transferenciaIndex = params['id'];
         this.transferenciasService.get(this.transferenciaIndex)
         .subscribe(data => this.selectedTransferencia = data);

@@ -15,25 +15,16 @@ export class TransferenciaService {
 
   private url: string = 'app/transferencias';
 
-  constructor(private http: Http) { }
+  public constructor(private _http: Http) { }
 
-  // obterHistoricoDeConta(numero, agencia) {
-  //   return this.http.get(`http://localhost:5000/conta/${numero}/agencia/${agencia}/historico`)
-  //   .map(response => response.json().data);
-  // }
-
-  
-  obterHistoricoDeConta(numero, agencia):Observable<Transferencia[]> {
-    return this.http.get(`http://localhost:5000/api/v1/conta/${numero}/agencia/${agencia}/historico`)
-                .map((res: Response) => res.json().data)
-                .catch(this.handleError);
-
+    obterHistoricoDeConta(numero, agencia) {
+      console.log('obter historico');
+      return this._http.get(`http://localhost:5000/api/v1/conta/${numero}/agencia/${agencia}/historico`)
+                  .map((res: Response) => res.json());
     }
 
-  
-
   getAll(): Observable<Transferencia[]> {
-    return this.http.get(this.url)
+    return this._http.get(this.url)
       .map(res => res.json().data)
       .catch(this.handleError);
   }
@@ -45,7 +36,7 @@ export class TransferenciaService {
   }
 
   add(record){
-    return this.http.post(this.url, JSON.stringify(record),
+    return this._http.post(this.url, JSON.stringify(record),
         {headers: this.getHeaders()})
       .map(res => res.json().data)
       .do(data => this.transferenciasChanged.emit(this.getAll()))
@@ -53,13 +44,13 @@ export class TransferenciaService {
   }
 
   update(record){
-    return this.http.put(this.getUrl(record.id), JSON.stringify(record), {headers: this.getHeaders()})
+    return this._http.put(this.getUrl(record.id), JSON.stringify(record), {headers: this.getHeaders()})
       .map(res => res.json().data)
       .catch(this.handleError);
   }
 
   remove(id){
-    return this.http.delete(this.getUrl(id), {headers: this.getHeaders()})
+    return this._http.delete(this.getUrl(id), {headers: this.getHeaders()})
       .map(res => res.json())
       .do(data => this.transferenciasChanged.emit(this.getAll()))
       .catch(this.handleError);

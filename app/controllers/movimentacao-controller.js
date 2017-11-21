@@ -28,7 +28,6 @@ exports.transferir = (( dadosMovimentacao)=>{
                     reject(error);
                 });
             }).catch(error=>{ 
-                console.log('errorr ' + error);
                 reject(error);
             });
         });
@@ -125,4 +124,19 @@ exports.depositar = (contaRemetente, valorADepositar)=>{
     });
 
 };
+
+exports.obterMovimentoPor = (id)=>{
+    let movimento = new db.Movimentacao();
+    movimento._id = id;
+    return new Promise((resolve, reject)=>{
+        db.Movimentacao.findById(movimento).exec(function (error, movimentacao){
+            if(error){
+                reject(error, 'Erro ao buscar movimento');
+            }    
+            resolve(movimentacao);
+        })
+    }).catch(error=>{
+        reject(`Erro ao obter movimento por id  ${error}`);
+    });
+}
    

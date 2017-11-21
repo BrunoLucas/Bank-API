@@ -99,6 +99,30 @@ describe('Teste de Movimentacao Controller', function(){
 
         });
 
+        it('Deve retornar movimento por id', function(){
+
+            const id = '5a1411ea790c53357c152347';
+            movimentacaoController.obterMovimentoPor(id).then(resp=>{
+                expect(resp).toBeDefined();
+                expect(resp.tipo_movimentacao).toEqual('ADD');
+                expect(resp.valor_movimentacao).toEqual(200);
+                expect(resp.agencia_destinatario).toEqual('1803');
+                expect(resp.agencia_remetente).toEqual('1803');                
+                expect(resp.numero_conta_destinatario).toEqual(123456);
+                expect(resp.numero_conta_remetente).toEqual(123480);
+            }).catch(error=>{
+                fail(`nao conseguiu encontrar movimento. ${error}`);
+            })
+        });
+        it('Deve retornar erro quando movimento não for encontrado', function(){
+                        const id = 123;
+                        movimentacaoController.obterMovimentoPor(id).then(resp=>{
+                            fail(`nao deven encontrar movimento. ${resp}`);
+                        }).catch(error=>{
+                            expect(error).toBeDefined();
+                        })
+        });
+
     });
 
     function criarConta() {

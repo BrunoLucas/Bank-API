@@ -84,3 +84,15 @@ app.post('/api/v1/conta/transfer', (req, res)=>{
     })
     
 });
+
+app.get('/api/v1/conta/transfer/:id', (req, res)=>{
+    const idMovimento = req.params.id;
+
+    
+    movimentoController.obterMovimentoPor(idMovimento).then(result=>{
+        return res.status(200).json(result);
+    }).catch(error=>{
+        return res.status(500).json(error.message);
+    })
+    
+});
