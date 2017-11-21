@@ -1,0 +1,85 @@
+<h5>{{ title }}</h5>
+<div class="row" *ngIf="transferencia" >
+  <form materialize class="col s12" [formGroup]="form" (ngSubmit)="onSave()">
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">account_circle</i> -->
+        <input id="numero" type="text" class="validate"
+               [(ngModel)]="transferencia.numero" formControlName="numero"
+               [class.invalid]="form.controls['numero'].touched && !form.controls['numero'].valid"
+        >
+        <label for="numero"
+               [class.active]="transferencia.numero"
+               data-error="You need to enter at least 3 chars">
+          Conta
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">email</i> -->
+        <input id="agencia" type="text" class="validate"
+               [(ngModel)]="transferencia.agencia" formControlName="agencia"
+               [class.invalid]="form.controls['agencia'].touched && !form.controls['agencia'].valid">
+        <label for="agencia"
+               [class.active]="transferencia.agencia"
+               data-error="Invalid agencia">
+          Agência
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">account_circle</i> -->
+        <input id="numero_destino" type="text" class="validate"
+               [(ngModel)]="transferencia.numero_destino" formControlName="numero_destino"
+               [class.invalid]="form.controls['numero_destino'].touched && !form.controls['numero_destino'].valid"
+        >
+        <label for="numero_destino"
+               [class.active]="transferencia.numero_destino"
+               data-error="You need to enter at least 3 chars">
+          Conta de destino
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">email</i> -->
+        <input id="agencia_destino" type="text" class="validate"
+               [(ngModel)]="transferencia.agencia_destino" formControlName="agencia_destino"
+               [class.invalid]="form.controls['agencia_destino'].touched && !form.controls['agencia_destino'].valid">
+        <label for="agencia_destino"
+               [class.active]="transferencia.agencia_destino"
+               data-error="Invalid agencia">
+          Agência de destino
+        </label>
+      </div>
+    </div>
+ 
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">email</i> -->
+        <input id="valor" type="text" class="validate"
+               [(ngModel)]="transferencia.valor" formControlName="valor"
+               [class.invalid]="form.controls['valor'].touched && !form.controls['valor'].valid">
+        <label for="valor"
+               [class.active]="transferencia.valor"
+               data-error="Invalid valor">
+          Valor
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn waves-effect waves-light" type="submit"
+                [disabled]="!form.valid">
+          Submit<i class="material-icons right">send</i>
+        </button>
+        <a class="waves-effect waves-light btn red"
+        (click)="onCancel()">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>

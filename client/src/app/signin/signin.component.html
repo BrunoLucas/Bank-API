@@ -1,0 +1,35 @@
+<h5>Login</h5>
+<div class="row">
+  <form materialize class="col s12" [formGroup]="form" (ngSubmit)="onSignin()">
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="numero" type="text" class="validate"
+               formControlName="numero"
+               [class.invalid]="form.controls['numero'].touched && !form.controls['numero'].valid">
+        <label for="numero"
+               data-error="Invalid numero">
+          numero
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="agencia" type="text" class="validate"
+               formControlName="agencia"
+               [class.invalid]="form.controls['agencia'].touched && !form.controls['agencia'].valid">
+        <label for="agencia"
+               data-error="agencia is mandatory">
+          agencia
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn waves-effect waves-light" type="submit"
+                [disabled]="!form.valid">
+          Login<i class="material-icons right">send</i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
