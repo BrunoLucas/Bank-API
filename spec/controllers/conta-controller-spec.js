@@ -29,9 +29,9 @@ describe('Teste de Conta Controller', function(){
 
         it('Não deve encontrar uma conta inexistente', function(){
             contaController.buscarPorNumeroContaEAgencia(1, 1803).then(resp=>{
-                expect(resp).toBeNull();
+                expect(resp).toBeUndefined();
             }).catch(error=>{
-                fail('erro em buscar conta inexistente ' + error);
+                expect(error).toBeDefined();
             })
         });
 

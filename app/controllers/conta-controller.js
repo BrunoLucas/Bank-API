@@ -59,6 +59,9 @@ exports.buscarPorNumeroContaEAgencia = (numeroConta=0,agencia='') =>{
             if(error){
                 reject(error, 'Erro ao buscar conta e agencia');
             }else{
+                if(!conta){
+                    reject(error, 'Erro ao buscar conta e agencia');
+                }
                 resolve(conta);
             }
         }));

@@ -35,7 +35,8 @@ app.get('/conta/:conta/agencia/:agencia', function(req, res){
         });
     }); 
 
-// login na conta
+    
+
 app.post('/conta',(req, res) =>{
     contaController.salvar(req.body).then(contaRetornada => {
         res.status(201).json(contaRetornada);
@@ -43,6 +44,17 @@ app.post('/conta',(req, res) =>{
         res.status(500).json(error);
     })
 });
+
+app.post('/conta/login',(req, res) =>{
+    var conta = parseInt(req.params.conta);
+    var agencia = req.params.agencia;
+    contaController.buscarPorNumeroContaEAgencia(conta, agencia).then(contaRetornada => {
+        res.status(200).json(contaRetornada);
+    }).catch(error =>{
+        res.status(500).json(error);
+    })
+});
+
 
 app.get('/conta/historico/:numero', (req, res)=>{
 
@@ -52,6 +64,16 @@ app.get('/conta/historico/:numero', (req, res)=>{
     });
 });
 
+app.get('/conta/:numero/agencia/:agencia/historico', (req, res)=>{
+
+    var numero = validator.trim(validator.escape(req.params.numero));
+    var agencia = validator.trim(validator.escape(req.params.agencia));
+    movimentoController.obterHistoricoDeConta(numero, agencia).then(movimentos =>{
+        res.status(200).json(movimentos);
+    }).catch(error=>{
+        res.status(500).json(error);
+    })
+});
 
 app.post('/conta/transfer', (req, res)=>{
     var movimentacao = new Movimentacao();

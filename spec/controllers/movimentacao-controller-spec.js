@@ -78,6 +78,11 @@ describe('Teste de Movimentacao Controller', function(){
                 }).catch(error=>{
                     fail('Erro ao realizar transferencia ' + error);
                 });
+                movimentacaoController.obterHistoricoDeConta(conta1.numero, conta1.agencia).then(resp=>{
+                    expect(resp).toBeDefined();
+                }).catch(error=>{
+                    fail('Erro ao tentar obter historico de conta');
+                })
                 
 
         });

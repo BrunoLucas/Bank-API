@@ -73,8 +73,31 @@ exports.transferir = (( dadosMovimentacao)=>{
             throw (error);
         });
     }
+
+   
 });
 
+exports.obterHistoricoDeConta = (numero, agencia)=>{
+    
+            return new Promise((resolve, reject)=>{
+                db.Movimentacao.find(
+                    {numero_conta_remetente: numero,
+                     agencia_remetente: agencia
+                    }).exec((function(error, movimentosRetornados){
+                        if(error){
+                            reject('Erro ao obter historico de conta' + error);
+                        }else{
+                            if(!movimentosRetornados){
+                                reject('Erro ao obter historico de conta');
+                            }
+                            resolve(movimentosRetornados);
+                        }
+                    }))
+            }).catch(error =>{
+                throw (error);
+            });
+        }
+        
 exports.depositar = (contaRemetente, valorADepositar)=>{
 
     return new Promise((resolve, reject)=>{        
