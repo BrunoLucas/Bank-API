@@ -16,6 +16,7 @@ import { transferenciasRouting } from './transferencia.routing';
 import { TransferenciaService } from './transferencia.service';
 import { TransferenciaListItemComponent } from './transferencia-list-item/transferencia-list-item.component';
 import { TransferenciaFormGuard } from './transferencia-form/transferencia-form.guard';
+import { TransferenciaDetailAccountComponent } from './transferencia-detail-account/transferencia-detail-account.component'; 
 
 @NgModule({
     imports: [
@@ -33,7 +34,8 @@ import { TransferenciaFormGuard } from './transferencia-form/transferencia-form.
       TransferenciaListComponent,
       TransferenciaFormComponent,
       TransferenciaDetailComponent,
-      TransferenciaListItemComponent
+      TransferenciaListItemComponent,
+      TransferenciaDetailAccountComponent
     ],
     providers: [ TransferenciaFormGuard ]
 })

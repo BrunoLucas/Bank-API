@@ -1,8 +1,6 @@
-<p>
-  Displaying {{ transferencias.length }} transferencias.
-</p>
 
-<div class="collection">
+
+<div class="collection col s10">
   <app-transferencia-list-item
     *ngFor="let transferencia of transferencias"
     [transferencia]="transferencia">

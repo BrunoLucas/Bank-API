@@ -29,7 +29,11 @@ app.get('/api/v1/conta/:conta/agencia/:agencia', function(req, res){
         var conta = parseInt(req.params.conta);
         var agencia = req.params.agencia;
         contaController.buscarPorNumeroContaEAgencia(conta, agencia).then(resp=>{
-            res.status(200).json(resp);
+            movimentoController.obterSaldoAtualDeConta(conta, agencia).then(saldo =>{
+                console.log(saldo);
+               resp.saldo = saldo;
+               res.status(200).json(resp);
+            });
         }).catch(error=>{
             res.status(500).json(error);
         });

@@ -6,7 +6,6 @@ import { TransferenciaService } from '../transferencia.service';
 import { Transferencia } from '../transferencia';
 import { BasicValidators } from '../../shared/basic-validators';
 import { ComponentCanDeactivate } from './transferencia-form.guard';
-//import { FormControl } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-transferencia-form',
@@ -48,6 +47,9 @@ export class TransferenciaFormComponent implements OnInit, OnDestroy, ComponentC
         this.initForm();
       }
     );
+    console.log('pegando conta da sessao');
+    this.transferencia.numero  = localStorage.getItem('account');
+    this.transferencia.agencia = localStorage.getItem('agency');
   }
 
   private initForm() {

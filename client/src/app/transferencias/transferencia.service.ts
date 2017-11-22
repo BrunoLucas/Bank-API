@@ -16,7 +16,6 @@ export class TransferenciaService {
   public constructor(private _http: Http) { }
 
     obterHistoricoDeConta(numero, agencia) {
-      console.log('obter historico');
       return this._http.get(`http://localhost:5000/api/v1/conta/${numero}/agencia/${agencia}/historico`)
                   .map((res: Response) => res.json());
     }

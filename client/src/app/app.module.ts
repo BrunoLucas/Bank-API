@@ -9,6 +9,7 @@ import { routing } from './app.routing';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth.guard';
 import { SigninComponent } from './signin/signin.component';
+import { AccountService } from './account/account.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SigninComponent } from './signin/signin.component';
   providers: [
     AuthGuard,
     AuthService,
-    TransferenciaService
+    TransferenciaService,
+    AccountService
   ],
   bootstrap: [AppComponent]
 })

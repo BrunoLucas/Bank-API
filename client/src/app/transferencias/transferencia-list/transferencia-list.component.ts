@@ -16,7 +16,6 @@ export class TransferenciaListComponent implements OnInit {
   constructor(private transferenciasService: TransferenciaService, private authService: AuthService) { }
 
   ngOnInit() {
-    console.log('ngOnInit');
     const conta: any = localStorage.getItem('account');
     const agencia: any = localStorage.getItem('agency');
      this.transferenciasService.obterHistoricoDeConta(conta, agencia).subscribe(movimentos => {
