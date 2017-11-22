@@ -38,7 +38,7 @@ describe('Teste de Movimentacao Controller', function(){
                     expect(resp.numero_conta_destinatario) .toEqual( movimentacao.numero_conta_destinatario);
                     expect(resp.agencia_destinatario) .toEqual(movimentacao.agencia_destinatario);
                     // expect(conta2.saldo +  movimentacao.valor_movimentacao).toEqual(conta2.saldo + 100.00);
-                    expect(resp.tipo_movimentacao).toEqual('ADD');
+                    expect(resp.tipo_movimentacao).toEqual('TRA');
 
             }).catch(error=>{
                     fail('Erro ao transferir 100 entre contas existentes '+error);
@@ -63,8 +63,8 @@ describe('Teste de Movimentacao Controller', function(){
         });
 
         it('Deve retornar historico de transferencias para numero e agencia', function(){
-                conta2.numero = 123465;
-                conta2.agencia = '1803';
+                conta2.numero = 24565;
+                conta2.agencia = '1200';
                 conta2.valor_deposito_inicial = 500.00;
 
 
@@ -100,15 +100,15 @@ describe('Teste de Movimentacao Controller', function(){
 
         it('Deve retornar movimento por id', function(){
 
-            const id = '5a1028a0c139147bed9bddc4';
+            const id = '5a1580ea4c676419dcb94b18';
             movimentacaoController.obterMovimentoPor(id).then(resp=>{
                 expect(resp).toBeDefined();
-                expect(resp.tipo_movimentacao).toEqual('ADD');
-                expect(resp.valor_movimentacao).toEqual(200);
-                expect(resp.agencia_destinatario).toEqual('1803');
+                expect(resp.tipo_movimentacao).toEqual('TRA');
+                expect(resp.valor_movimentacao).toEqual(40);
+                expect(resp.agencia_destinatario).toEqual('1200');
                 expect(resp.agencia_remetente).toEqual('1803');                
-                expect(resp.numero_conta_destinatario).toEqual(123456);
-                expect(resp.numero_conta_remetente).toEqual(123480);
+                expect(resp.numero_conta_destinatario).toEqual(24565);
+                expect(resp.numero_conta_remetente).toEqual(123456);
             }).catch(error=>{
                 fail(`nao conseguiu encontrar movimento. ${error}`);
             })
@@ -124,8 +124,10 @@ describe('Teste de Movimentacao Controller', function(){
         });
 
         it('Deve retornar saldo da conta através dos movimentos', function (){
-
-            fail('ainda sera implementado');
+            
+            movimentacaoController.obterSaldoAtualDeConta(123456,'1803').then(resp=>{
+                expect(resp).toBeDefined();
+            });
         });
 
     });
@@ -148,7 +150,7 @@ describe('Teste de Movimentacao Controller', function(){
         movimentacao.agencia_remetente = contaRemetente.agencia;
         movimentacao.agencia_destinatario = contaDestinatario.agencia;
         movimentacao.numero_conta_destinatario = contaDestinatario.numero;
-        movimentacao.tipo_movimentacao = 'ADD';
+        movimentacao.tipo_movimentacao = 'TRA';
         
         return movimentacao;
     }
