@@ -4,12 +4,12 @@
     <div class="row">
       <div class="input-field col s12">
         <!-- <i class="material-icons prefix">account_circle</i> -->
-        <input id="numero" type="text" class="validate"
-               [(ngModel)]="transferencia.numero" formControlName="numero"
-               [class.invalid]="form.controls['numero'].touched && !form.controls['numero'].valid"
+        <input id="numero_conta_remetente" type="text" class="validate"
+               [(ngModel)]="transferencia.numero_conta_remetente" formControlName="numero_conta_remetente"
+               [class.invalid]="form.controls['numero_conta_remetente'].touched && !form.controls['numero_conta_remetente'].valid"
         >
-        <label for="numero"
-               [class.active]="transferencia.numero"
+        <label for="numero_conta_remetente"
+               [class.active]="transferencia.numero_conta_remetente"
                data-error="You need to enter at least 3 chars">
           Conta
         </label>
@@ -18,11 +18,11 @@
     <div class="row">
       <div class="input-field col s12">
         <!-- <i class="material-icons prefix">email</i> -->
-        <input id="agencia" type="text" class="validate"
-               [(ngModel)]="transferencia.agencia" formControlName="agencia"
-               [class.invalid]="form.controls['agencia'].touched && !form.controls['agencia'].valid">
-        <label for="agencia"
-               [class.active]="transferencia.agencia"
+        <input id="agencia_remetente" type="text" class="validate"
+               [(ngModel)]="transferencia.agencia_remetente" formControlName="agencia_remetente"
+               [class.invalid]="form.controls['agencia_remetente'].touched && !form.controls['agencia_remetente'].valid">
+        <label for="agencia_remetente"
+               [class.active]="transferencia.agencia_remetente"
                data-error="Invalid agencia">
           Agência
         </label>
@@ -32,12 +32,12 @@
     <div class="row">
       <div class="input-field col s12">
         <!-- <i class="material-icons prefix">account_circle</i> -->
-        <input id="numero_destino" type="text" class="validate"
-               [(ngModel)]="transferencia.numero_destino" formControlName="numero_destino"
-               [class.invalid]="form.controls['numero_destino'].touched && !form.controls['numero_destino'].valid"
+        <input id="numero_conta_destinatario" type="text" class="validate"
+               [(ngModel)]="transferencia.numero_conta_destinatario" formControlName="numero_conta_destinatario"
+               [class.invalid]="form.controls['numero_conta_destinatario'].touched && !form.controls['numero_conta_destinatario'].valid"
         >
-        <label for="numero_destino"
-               [class.active]="transferencia.numero_destino"
+        <label for="numero_conta_destinatario"
+               [class.active]="transferencia.numero_conta_destinatario"
                data-error="You need to enter at least 3 chars">
           Conta de destino
         </label>
@@ -46,11 +46,11 @@
     <div class="row">
       <div class="input-field col s12">
         <!-- <i class="material-icons prefix">email</i> -->
-        <input id="agencia_destino" type="text" class="validate"
-               [(ngModel)]="transferencia.agencia_destino" formControlName="agencia_destino"
-               [class.invalid]="form.controls['agencia_destino'].touched && !form.controls['agencia_destino'].valid">
+        <input id="agencia_destinatario" type="text" class="validate"
+               [(ngModel)]="transferencia.agencia_destinatario" formControlName="agencia_destinatario"
+               [class.invalid]="form.controls['agencia_destinatario'].touched && !form.controls['agencia_destinatario'].valid">
         <label for="agencia_destino"
-               [class.active]="transferencia.agencia_destino"
+               [class.active]="transferencia.agencia_destinatario"
                data-error="Invalid agencia">
           Agência de destino
         </label>
@@ -60,11 +60,11 @@
     <div class="row">
       <div class="input-field col s12">
         <!-- <i class="material-icons prefix">email</i> -->
-        <input id="valor" type="text" class="validate"
-               [(ngModel)]="transferencia.valor" formControlName="valor"
-               [class.invalid]="form.controls['valor'].touched && !form.controls['valor'].valid">
-        <label for="valor"
-               [class.active]="transferencia.valor"
+        <input id="valor_movimentacao" type="text" class="validate"
+               [(ngModel)]="transferencia.valor_movimentacao" formControlName="valor_movimentacao"
+               [class.invalid]="form.controls['valor_movimentacao'].touched && !form.controls['valor_movimentacao'].valid">
+        <label for="valor_movimentacao"
+               [class.active]="transferencia.valor_movimentacao"
                data-error="Invalid valor">
           Valor
         </label>

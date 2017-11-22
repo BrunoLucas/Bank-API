@@ -1,11 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Headers , Response} from '@angular/http';
-
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Rx';
-
 import { Transferencia } from './transferencia';
 
 @Injectable()
@@ -13,7 +11,7 @@ export class TransferenciaService {
 
   transferenciasChanged = new EventEmitter<Observable<Transferencia[]>>();
 
-  private url: string = 'app/transferencias';
+  private url = 'app/transferencias';
 
   public constructor(private _http: Http) { }
 
@@ -29,27 +27,26 @@ export class TransferenciaService {
       .catch(this.handleError);
   }
 
-  get(id){
-    return this.getAll()
-      .map((list: any) => list.find(transferencia => transferencia.id == id))
-      .catch(this.handleError);
+  get(id) {
+    return this._http.get(`http://localhost:5000/api/v1/conta/transfer/${id}`)
+                .map((res: Response) => res.json());
   }
 
-  add(record){
-    return this._http.post(this.url, JSON.stringify(record),
+  add(record) {
+    return this._http.post(`http://localhost:5000/api/v1/conta/transfer`, JSON.stringify(record),
         {headers: this.getHeaders()})
       .map(res => res.json().data)
       .do(data => this.transferenciasChanged.emit(this.getAll()))
       .catch(this.handleError);
   }
 
-  update(record){
+  update(record) {
     return this._http.put(this.getUrl(record.id), JSON.stringify(record), {headers: this.getHeaders()})
       .map(res => res.json().data)
       .catch(this.handleError);
   }
 
-  remove(id){
+  remove(id) {
     return this._http.delete(this.getUrl(id), {headers: this.getHeaders()})
       .map(res => res.json())
       .do(data => this.transferenciasChanged.emit(this.getAll()))
@@ -57,13 +54,13 @@ export class TransferenciaService {
   }
 
   private getHeaders(){
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return headers;
   }
 
   private handleError(error: any) {
-    let erro = error.message || 'Server error';
+    const erro = error.message || 'Server error';
     console.error('Ocorreu um erro', error);
     return Observable.throw(erro);
   }

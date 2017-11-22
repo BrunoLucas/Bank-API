@@ -36,7 +36,7 @@ export class TransferenciaFormComponent implements OnInit, OnDestroy, ComponentC
           this.isNew = false;
           this.transferenciaIndex = +params['id'];
           this.transferenciasService.get(this.transferenciaIndex)
-          .subscribe(data => this.transferencia = data);
+            .subscribe(data => this.transferencia = data);
           this.title = 'Edit transferencia';
         } else {
           this.isNew = true;
@@ -50,20 +50,20 @@ export class TransferenciaFormComponent implements OnInit, OnDestroy, ComponentC
 
   private initForm() {
     this.form = this.formBuilder.group({
-      numero: ['', [
+      numero_conta_remetente: ['', [
         Validators.required,
         Validators.minLength(3)
       ]],
-      agencia: ['', [
+      agencia_remetente: ['', [
         Validators.required]],
-        numero_destino: ['', [
-          Validators.required,
-          Validators.minLength(3)
-        ]],
-        agencia_destino: ['', [
-          Validators.required]]   ,
-          valor: ['', [
-            Validators.required]]
+        numero_conta_destinatario: ['', [
+        Validators.required,
+        Validators.minLength(3)
+      ]],
+      agencia_destinatario: ['', [
+        Validators.required]],
+        valor_movimentacao: ['', [
+        Validators.required]]
     });
   }
 
@@ -79,15 +79,15 @@ export class TransferenciaFormComponent implements OnInit, OnDestroy, ComponentC
     const transferenciaValue = this.form.value;
     let result;
 
-      result = this.transferenciasService.add(transferenciaValue);
+    result = this.transferenciasService.add(transferenciaValue);
 
 
     this.form.reset();
 
     result.subscribe(data => this.navigateBack(),
-    err => {
-      alert("An error occurred." + err);
-    });
+      err => {
+        alert("An error occurred." + err);
+      });
   }
 
   ngOnDestroy() {

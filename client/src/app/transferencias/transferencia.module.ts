@@ -35,6 +35,6 @@ import { TransferenciaFormGuard } from './transferencia-form/transferencia-form.
       TransferenciaDetailComponent,
       TransferenciaListItemComponent
     ],
-    providers: [ TransferenciaService, TransferenciaFormGuard ]
+    providers: [ TransferenciaFormGuard ]
 })
 export class TransferenciaModule {}

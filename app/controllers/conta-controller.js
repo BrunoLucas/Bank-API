@@ -56,7 +56,8 @@ exports.buscarPorNumeroContaEAgencia = (numeroConta=0,agencia='') =>{
     return new Promise((resolve, reject)=>{ 
         db.Conta.findOne({numero : numeroConta, agencia : agencia}).exec((function(error, conta){
 
-            if(error || !conta){
+            if(!conta){
+                console.log(conta);
                 reject(error, 'Erro ao buscar conta e agencia');
             }else{
                 resolve(conta);

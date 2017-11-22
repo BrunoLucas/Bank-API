@@ -71,11 +71,11 @@ app.get('/api/v1/conta/:numero/agencia/:agencia/historico', (req, res)=>{
 
 app.post('/api/v1/conta/transfer', (req, res)=>{
     var movimentacao = new Movimentacao();
-    movimentacao.numero_conta_remetente = validator.trim(validator.escape(req.body.numero_remetente));
-    movimentacao.agencia_remetente = validator.trim(validator.escape(req.body.agencia_remetente));
-    movimentacao.numero_conta_destinatario = validator.trim(validator.escape(req.body.numero_destinatario));
-    movimentacao.agencia_destinatario = validator.trim(validator.escape(req.body.agencia_destinatario));
-    movimentacao.valor_movimentacao = validator.trim(validator.escape(req.body.valor_transferencia));
+    movimentacao.numero_conta_remetente = req.body.numero_conta_remetente;
+    movimentacao.agencia_remetente = req.body.agencia_remetente;
+    movimentacao.numero_conta_destinatario = req.body.numero_conta_destinatario;
+    movimentacao.agencia_destinatario = req.body.agencia_destinatario;
+    movimentacao.valor_movimentacao = req.body.valor_movimentacao;
 
     movimentoController.transferir(movimentacao).then(result=>{
         return res.status(201).json(result);

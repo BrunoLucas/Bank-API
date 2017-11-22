@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-
 import { TransferenciaService } from '../transferencia.service';
 import { Transferencia } from '../transferencia';
-
+import {DatePipe} from '@angular/common';
 @Component({
   selector: 'app-transferencia-detail',
   templateUrl: './transferencia-detail.component.html',
   styleUrls: ['./transferencia-detail.component.scss']
-}) 
+})
 export class TransferenciaDetailComponent implements OnInit, OnDestroy {
 
   selectedTransferencia: Transferencia;
@@ -21,31 +20,31 @@ export class TransferenciaDetailComponent implements OnInit, OnDestroy {
               private transferenciasService: TransferenciaService) { }
 
   ngOnInit() {
+    console.log('detail');
     this.subscription = this.route.params.subscribe(
       (params: any) => {
+        console.log('params ' + params['id']);
         this.transferenciaIndex = params['id'];
         this.transferenciasService.get(this.transferenciaIndex)
-        .subscribe(data => this.selectedTransferencia = data);
+        .subscribe(data => {
+          console.log('transferencia ' + data);
+          this.selectedTransferencia = data;
+          this.selectedTransferencia.id = data._id;
+          this.selectedTransferencia.agencia = data.agencia_remetente;
+
+          this.selectedTransferencia.agencia_destino = data.agencia_destinatario;
+          this.selectedTransferencia.numero = data.numero_conta_remetente;
+          this.selectedTransferencia.conta_destino = data.numero_conta_destinatario;
+          this.selectedTransferencia.valor = data.valor_movimentacao;
+          this.selectedTransferencia.data = new DatePipe('pt-BR').transform(data.data_movimentacao, 'dd/MM/yyyy');
+
+        });
       }
     );
-  }
-
-  onEdit() {
-    this.router.navigate(['/transferencias', this.transferenciaIndex, 'edit']);
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
-  onDelete(){
-    if (confirm("Are you sure you want to delete " + this.selectedTransferencia.name + "?")) {
-      this.transferenciasService.remove(this.selectedTransferencia.id)
-        .subscribe(
-          data => this.router.navigate(['/transferencias']),
-          err => {
-            alert("Contato não removido.");
-          });
-    }
-  }
 }
+

@@ -43,7 +43,7 @@ exports.transferir = (( dadosMovimentacao)=>{
                }
               resolve(conta);
            }).catch(error=>{
-               reject('Conta do remetente nao encontrada' + error);
+               reject('Conta do remetente nao encontrada ' + error);
            });
         }).catch(error=>{
             throw new Error(error);
@@ -63,6 +63,7 @@ exports.transferir = (( dadosMovimentacao)=>{
            movimentacao.agencia_destinatario = dadosMovimentacao.agencia_destinatario;
            movimentacao.valor_movimentacao = dadosMovimentacao.valor_movimentacao;
            movimentacao.tipo_movimentacao = 'ADD';
+           movimentacao.data_movimentacao = new Date();
            movimentacao.save().then((resultadomovimentacao)=>{
                 resolve(resultadomovimentacao);
             }).error(error =>{
@@ -114,7 +115,7 @@ exports.depositar = (contaRemetente, valorADepositar)=>{
         movimentacao.agencia_remetente = contaRemetente.agencia;
         movimentacao.agencia_destinatario = contaRemetente.agencia;
         movimentacao.valor_movimentacao = valorADepositar;
-    
+        movimentacao.data_movimentacao = new Date();
         movimentacao.save().then((resultadomovimentacao)=>{
             resolve(movimentacao);
         }).error(error =>{
@@ -129,14 +130,23 @@ exports.obterMovimentoPor = (id)=>{
     let movimento = new db.Movimentacao();
     movimento._id = id;
     return new Promise((resolve, reject)=>{
-        db.Movimentacao.findById(movimento).exec(function (error, movimentacao){
-            if(error){
-                reject(error, 'Erro ao buscar movimento');
-            }    
-            resolve(movimentacao);
-        })
-    }).catch(error=>{
-        reject(`Erro ao obter movimento por id  ${error}`);
+        db.Movimentacao.findById(movimento).exec((error, movimentacao)=>{
+            if(error || !movimentacao){
+                reject('Erro ao obter movimento');
+            }else{    
+                resolve(movimentacao);
+            }
+        });
     });
-}
+ }
    
+// return new Promise((resolve, reject)=>{ 
+//     db.Conta.findOne({numero : numeroConta, agencia : agencia}).exec((function(error, conta){
+
+//         if(error || !conta){
+//             reject(error, 'Erro ao buscar conta e agencia');
+//         }else{
+//             resolve(conta);
+//         }
+//     }));
+// });

@@ -101,7 +101,7 @@ describe('Teste de Movimentacao Controller', function(){
 
         it('Deve retornar movimento por id', function(){
 
-            const id = '5a1411ea790c53357c152347';
+            const id = '5a1028a0c139147bed9bddc4';
             movimentacaoController.obterMovimentoPor(id).then(resp=>{
                 expect(resp).toBeDefined();
                 expect(resp.tipo_movimentacao).toEqual('ADD');
@@ -114,6 +114,7 @@ describe('Teste de Movimentacao Controller', function(){
                 fail(`nao conseguiu encontrar movimento. ${error}`);
             })
         });
+        
         it('Deve retornar erro quando movimento não for encontrado', function(){
                         const id = 123;
                         movimentacaoController.obterMovimentoPor(id).then(resp=>{
