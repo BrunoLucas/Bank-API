@@ -41,7 +41,6 @@ describe('Teste de Conta Controller', function(){
             conta.numero = 123456;
             conta.agencia = '1803';
             conta.nome = 'Conta Teste 1';
-            conta.saldo = 300.00;
             conta.data_criacao = new Date();
             return conta;
         }

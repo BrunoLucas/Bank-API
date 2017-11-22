@@ -39,6 +39,9 @@ app.get('/api/v1/conta/:conta/agencia/:agencia', function(req, res){
 
 app.post('/api/v1/conta',(req, res) =>{
     contaController.salvar(req.body).then(contaRetornada => {
+        movimentoController.depositar(contaRetornada, req.body.valor_deposito_inicial).catch(error=>{
+            res.status(500).json(error);
+        });
         res.status(201).json(contaRetornada);
     }).catch(error =>{
         res.status(500).json(error);
@@ -68,6 +71,25 @@ app.get('/api/v1/conta/:numero/agencia/:agencia/historico', (req, res)=>{
         res.status(500).json(error);
     })
 });
+app.get('/api/v1/historico', (req, res)=>{
+
+    movimentoController.obterHistoricoDeTodasAsContas().then(movimentos =>{
+        res.status(200).json(movimentos);
+    }).catch(error=>{
+        res.status(500).json(error);
+    })
+});
+
+app.get('/api/v1/conta/:numero/agencia/:agencia/saldo', (req, res)=>{
+    
+        var numero = validator.trim(validator.escape(req.params.numero));
+        var agencia = validator.trim(validator.escape(req.params.agencia));
+        movimentoController.obterSaldoAtualDeConta(numero, agencia).then(saldo =>{
+            res.status(200).json(saldo);
+        }).catch(error=>{
+            res.status(500).json(error);
+        })
+    });
 
 app.post('/api/v1/conta/transfer', (req, res)=>{
     var movimentacao = new Movimentacao();

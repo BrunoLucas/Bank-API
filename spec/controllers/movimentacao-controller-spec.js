@@ -18,7 +18,7 @@ describe('Teste de Movimentacao Controller', function(){
             conta2.numero = 123456;
             conta2.agencia = '1803';
             conta2.nome = 'Conta Teste 2';
-            conta2.saldo = 100.00;
+            conta2.valor_deposito_inicial = 100.00;
             conta2.data_criacao = new Date();
 
             movimentacao = criarTransferencia(conta1, conta2, 100.00);
@@ -34,10 +34,10 @@ describe('Teste de Movimentacao Controller', function(){
                     expect(resp).toBeDefined();
                     expect(resp.numero_conta_remetente) .toEqual( movimentacao.numero_conta_remetente);
                     expect(resp.agencia_remetente) .toEqual(movimentacao.agencia_remetente);
-                    expect(conta1.saldo -  movimentacao.valor_movimentacao) .toEqual(conta1.saldo - 100.00);
+                    // expect(conta1.saldo -  movimentacao.valor_movimentacao) .toEqual(conta1.saldo - 100.00);
                     expect(resp.numero_conta_destinatario) .toEqual( movimentacao.numero_conta_destinatario);
                     expect(resp.agencia_destinatario) .toEqual(movimentacao.agencia_destinatario);
-                    expect(conta2.saldo +  movimentacao.valor_movimentacao).toEqual(conta2.saldo + 100.00);
+                    // expect(conta2.saldo +  movimentacao.valor_movimentacao).toEqual(conta2.saldo + 100.00);
                     expect(resp.tipo_movimentacao).toEqual('ADD');
 
             }).catch(error=>{
@@ -55,7 +55,6 @@ describe('Teste de Movimentacao Controller', function(){
                             expect(resp).toBeDefined();
                             expect(resp.numero_conta_remetente) .toEqual( movimentacao.numero_conta_remetente);
                             expect(resp.agencia_remetente) .toEqual(movimentacao.agencia_remetente);
-                            expect(conta1.saldo +  valor_movimentacao) .toEqual(conta1.saldo + 90.00);
                             expect(resp.tipo_movimentacao).toEqual('DEP');
                     }).catch(error=>{
                         fail('Erro em deve depositar 90 para conta existente ' + error);
@@ -66,7 +65,7 @@ describe('Teste de Movimentacao Controller', function(){
         it('Deve retornar historico de transferencias para numero e agencia', function(){
                 conta2.numero = 123465;
                 conta2.agencia = '1803';
-                conta2.saldo = 500.00;
+                conta2.valor_deposito_inicial = 500.00;
 
 
                 let transferencia1 = criarTransferencia(conta1, conta2, 30.00);
@@ -124,6 +123,11 @@ describe('Teste de Movimentacao Controller', function(){
                         })
         });
 
+        it('Deve retornar saldo da conta através dos movimentos', function (){
+
+            fail('ainda sera implementado');
+        });
+
     });
 
     function criarConta() {
@@ -131,7 +135,7 @@ describe('Teste de Movimentacao Controller', function(){
         conta.numero = 123456;
         conta.agencia = '1803';
         conta.nome = 'Conta Teste 1';
-        conta.saldo = 300.00;
+        conta.valor_deposito_inicial = 300.00;
         conta.data_criacao = new Date();
         return conta;
     }

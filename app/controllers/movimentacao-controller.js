@@ -1,6 +1,10 @@
 var db = require('../db_config.js');
 var contaController = require('./conta-controller.js');
-
+/**
+ * DEP - Deposito para remetente
+ * TRA - Transferencia entre remetente e destinatario
+ * 
+ */
 exports.listar = function(callback){
 
     db.movimentacao.find({}, function(error, conta){
@@ -19,9 +23,9 @@ exports.transferir = (( dadosMovimentacao)=>{
         let saldoAtualRemetente;
         Promise.all([
             obterDadosConta(dadosMovimentacao.numero_conta_remetente, dadosMovimentacao.agencia_remetente),
-            obterDadosConta(dadosMovimentacao.numero_conta_destinatario, dadosMovimentacao.agencia_destinatario)
-            ]).then(res=>{
-                let saldoAtualRemetente = res[0].saldo;
+            obterDadosConta(dadosMovimentacao.numero_conta_destinatario, dadosMovimentacao.agencia_destinatario),
+            this.obterSaldoAtualDeConta(dadosMovimentacao.numero_conta_remetente, dadosMovimentacao.agencia_remetente)
+            ]).then(saldoAtualRemetente=>{
                 enviarMovimento(dadosMovimentacao, saldoAtualRemetente).then(res=>{
                     resolve(res);
                 }).catch(error =>{
@@ -62,7 +66,7 @@ exports.transferir = (( dadosMovimentacao)=>{
            movimentacao.agencia_remetente = dadosMovimentacao.agencia_remetente;
            movimentacao.agencia_destinatario = dadosMovimentacao.agencia_destinatario;
            movimentacao.valor_movimentacao = dadosMovimentacao.valor_movimentacao;
-           movimentacao.tipo_movimentacao = 'ADD';
+           movimentacao.tipo_movimentacao = 'TRA';
            movimentacao.data_movimentacao = new Date();
            movimentacao.save().then((resultadomovimentacao)=>{
                 resolve(resultadomovimentacao);
@@ -80,10 +84,14 @@ exports.transferir = (( dadosMovimentacao)=>{
 exports.obterHistoricoDeConta = (numero, agencia)=>{
     
             return new Promise((resolve, reject)=>{
+
                 db.Movimentacao.find(
-                    {numero_conta_remetente: numero,
-                     agencia_remetente: agencia
-                    }).exec((function(error, movimentosRetornados){
+                    {$or:[ {numero_conta_remetente: numero,
+                        agencia_remetente: agencia
+                       }, {numero_conta_destinatario: numero,
+                        agencia_destinatario: agencia
+                    }]}
+                   ).exec((function(error, movimentosRetornados){
                         if(error){
                             reject('Erro ao obter historico de conta' + error);
                         }else{
@@ -92,21 +100,62 @@ exports.obterHistoricoDeConta = (numero, agencia)=>{
                             }
                             resolve(movimentosRetornados);
                         }
-                    }))
+                    }));
+               
             }).catch(error =>{
-                throw (error);
+                reject(error);
             });
-        }
+    }
+
+    exports.obterHistoricoDeTodasAsContas = ()=>{
         
+                return new Promise((resolve, reject)=>{
+    
+                    db.Movimentacao.find({}).exec((function(error, movimentosRetornados){
+                            if(error){
+                                reject('Erro ao obter historico de contas' + error);
+                            }else{
+                                if(!movimentosRetornados){
+                                    reject('Erro ao obter historico de contas');
+                                }
+                                resolve(movimentosRetornados);
+                            }
+                        }));
+                   
+                }).catch(error =>{
+                    reject(error);
+                });
+        }
+  
+exports.obterSaldoAtualDeConta = (numero, agencia)=>{
+    return new Promise((resolve, reject)=>{
+
+        let saldo = 0.00;
+        this.obterHistoricoDeConta(numero, agencia).then(movimentos=>{
+            movimentos.forEach(movimento=>{
+                if(movimento.tipo_movimentacao === 'DEP'){
+                    saldo += movimento.valor_movimentacao;
+                }else if(movimento.numero_conta_remetente === numero 
+                        && movimento.agencia_remetente === agencia){
+                            saldo -= movimento.valor_movimentacao;
+                        }
+                else if(movimento.numero_conta_destinatario === numero 
+                            && movimento.agencia_destinatario === agencia){
+                                saldo += movimento.valor_movimentacao;
+                }        
+            });
+            resolve(saldo);
+        }).catch(error=>{
+            reject(error);
+        });
+    });
+}    
 exports.depositar = (contaRemetente, valorADepositar)=>{
 
     return new Promise((resolve, reject)=>{        
         contaController.buscarPorNumeroContaEAgencia(contaRemetente.numero,contaRemetente.agencia).catch(error=>{
             reject('Conta do remetente nao encontrada');
         });       
-        contaController.depositar(contaRemetente, valorADepositar).catch(error=>{
-            reject('Erro ao realizar deposito ' + error);
-        });
    
         var movimentacao = new db.Movimentacao();
         movimentacao.tipo_movimentacao = 'DEP';
