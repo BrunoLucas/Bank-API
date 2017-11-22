@@ -8,6 +8,7 @@ import { TransferenciaService } from '../transferencia.service';
 import { Transferencia } from '../transferencia';
 import { BasicValidators } from '../../shared/basic-validators';
 import { ComponentCanDeactivate } from './transferencia-form.guard';
+import { FormControl } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-transferencia-form',
@@ -30,6 +31,7 @@ export class TransferenciaFormComponent implements OnInit, OnDestroy, ComponentC
     private transferenciasService: TransferenciaService) { }
 
   ngOnInit() {
+    console.log('ngOnInit');
     this.subscription = this.route.params.subscribe(
       (params: any) => {
         if (params.hasOwnProperty('id')) {
@@ -41,6 +43,8 @@ export class TransferenciaFormComponent implements OnInit, OnDestroy, ComponentC
         } else {
           this.isNew = true;
           this.transferencia = new Transferencia();
+          this.transferencia.numero  = localStorage.getItem('account');
+          this.transferencia.agencia = localStorage.getItem('agency');
           this.title = 'New transferencia';
         }
         this.initForm();
@@ -50,10 +54,10 @@ export class TransferenciaFormComponent implements OnInit, OnDestroy, ComponentC
 
   private initForm() {
     this.form = this.formBuilder.group({
-      numero_conta_remetente: ['', [
+      numero_conta_remetente: new FormControl( ['', [
         Validators.required,
         Validators.minLength(3)
-      ]],
+      ]]),
       agencia_remetente: ['', [
         Validators.required]],
         numero_conta_destinatario: ['', [
