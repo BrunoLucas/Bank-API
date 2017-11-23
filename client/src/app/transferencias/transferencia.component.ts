@@ -10,6 +10,7 @@ export class TransferenciaComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('tes');
   }
 
 }

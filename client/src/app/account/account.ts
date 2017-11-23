@@ -5,4 +5,4 @@ export class Account {
     agencia: string;
     saldo: number;
     data_criacao: string;
-} 
+}

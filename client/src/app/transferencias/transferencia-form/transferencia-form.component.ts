@@ -90,7 +90,7 @@ export class TransferenciaFormComponent implements OnInit, OnDestroy, ComponentC
 
     result.subscribe(data => this.navigateBack(),
       err => {
-        alert("An error occurred." + err);
+        alert('An error occurred.' + err);
       });
   }
 

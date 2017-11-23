@@ -29,6 +29,7 @@ export class TransferenciaDetailAccountComponent implements OnInit, OnDestroy {
         accountMemory.agencia = localStorage.getItem('agency');
         this.accountService.obterDadosDeConta(accountMemory)
         .subscribe(data => {
+            console.log(data);
             this.account = new Account();
             this.account.numero = data.numero;
             this.account.agencia = data.agencia;

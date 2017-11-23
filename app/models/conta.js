@@ -7,7 +7,8 @@ var ContaSchema = new Schema({
     agencia: String,
     nome: String,
     data_criacao: Date,
-    valor_deposito_inicial: Number
+    valor_deposito_inicial: Number,
+    saldo: Number
 });
  
 module.exports = mongoose.model('Conta', ContaSchema);
