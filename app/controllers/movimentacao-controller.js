@@ -1,5 +1,6 @@
 var db = require('../db_config.js');
 var contaController = require('./conta-controller.js');
+var emailController = require('./email-controller.js');
 /**
  * DEP - Deposito para remetente
  * TRA - Transferencia entre remetente e destinatario
@@ -27,6 +28,7 @@ exports.transferir = (( dadosMovimentacao)=>{
             this.obterSaldoAtualDeConta(dadosMovimentacao.numero_conta_remetente, dadosMovimentacao.agencia_remetente)
             ]).then(saldoAtualRemetente=>{
                 enviarMovimento(dadosMovimentacao, saldoAtualRemetente).then(res=>{
+                    emailController.sendMail(res);
                     resolve(res);
                 }).catch(error =>{
                     reject(error);
@@ -68,6 +70,7 @@ exports.transferir = (( dadosMovimentacao)=>{
            movimentacao.valor_movimentacao = dadosMovimentacao.valor_movimentacao;
            movimentacao.tipo_movimentacao = 'TRA';
            movimentacao.data_movimentacao = new Date();
+           movimentacao.email_comprovante = dadosMovimentacao.email_comprovante;
            movimentacao.save().then((resultadomovimentacao)=>{
                 resolve(resultadomovimentacao);
             }).error(error =>{

@@ -1,4 +1,4 @@
-var db_string = 'mongodb://127.0.0.1/bank3';
+var db_string = 'mongodb://127.0.0.1/bank4';
 var mongoose = require('mongoose');
 
 mongoose.Promise = require('bluebird');

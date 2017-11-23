@@ -102,7 +102,7 @@ app.post('/api/v1/conta/transfer', (req, res)=>{
     movimentacao.numero_conta_destinatario = req.body.numero_conta_destinatario;
     movimentacao.agencia_destinatario = req.body.agencia_destinatario;
     movimentacao.valor_movimentacao = req.body.valor_movimentacao;
-
+    movimentacao.email_comprovante = req.body.email_comprovante;
     movimentoController.transferir(movimentacao).then(result=>{
         return res.status(201).json(result);
     }).catch(error=>{

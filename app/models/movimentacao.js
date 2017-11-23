@@ -9,7 +9,8 @@ var MovimentacaoSchema = new Schema({
     numero_conta_destinatario: Number,
     agencia_destinatario: String, 
     data_movimentacao: Date,
-    valor_movimentacao: Number
+    valor_movimentacao: Number,
+    email_comprovante: String    
 });
  
 module.exports = mongoose.model('Movimentacao', MovimentacaoSchema);
