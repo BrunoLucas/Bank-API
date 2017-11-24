@@ -36,21 +36,21 @@ http://localhost:5000
 
 List of endpoints provided:
 
-GET     /api/v1/conta
+GET     /api/v1/account
 
-GET     /api/v1/conta/:conta/agencia/:agencia
+GET     /api/v1/account/:conta/agency/:agencia
 
-GET     /api/v1/conta
+GET     /api/v1/account
 
 POST    /api/v1/login
 
-GET     /api/v1/conta/:numero/agencia/:agencia/historico
+GET     /api/v1/account/:numero/agency/:agencia/historic
 
-GET     /api/v1/historico
+GET     /api/v1/historic
 
-GET     /api/v1/conta/:numero/agencia/:agencia/saldo
+GET     /api/v1/account/:numero/agency/:agencia/amount
 
-POST    /api/v1/conta/transfer
+POST    /api/v1/account/transfer
 
 
 
