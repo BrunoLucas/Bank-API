@@ -1,8 +1,8 @@
 export class Account {
     id: number;
-    nome: string;
-    numero: string;
-    agencia: string;
-    saldo: number;
-    data_criacao: string;
+    name: string;
+    number: string;
+    agency: string;
+    amount: number;
+    creation_date: string;
 }

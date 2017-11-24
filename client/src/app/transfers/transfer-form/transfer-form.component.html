@@ -1,0 +1,85 @@
+<h5>{{ title }}</h5>
+<div class="row" *ngIf="transfer" >
+  <form materialize class="col s12" [formGroup]="form" (ngSubmit)="onSave()">
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">account_circle</i> -->
+        <input id="sender_account_number" type="text" class="validate"
+               [(ngModel)]="transfer.sender_account_number" formControlName="sender_account_number"
+               [class.invalid]="form.controls['sender_account_number'].touched && !form.controls['sender_account_number'].valid"
+        >
+        <label for="sender_account_number"
+               [class.active]="transfer.sender_account_number"
+               data-error="Você precisa informar ao menos 3 caracteres">
+          Conta
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">email</i> -->
+        <input id="sender_agency" type="text" class="validate"
+               [(ngModel)]="transfer.sender_agency" formControlName="sender_agency"
+               [class.invalid]="form.controls['sender_agency'].touched && !form.controls['sender_agency'].valid">
+        <label for="sender_agency"
+               [class.active]="transfer.sender_agency"
+               data-error="Agência inválida">
+          Agência
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">account_circle</i> -->
+        <input id="recipient_account_number" type="text" class="validate"
+               [(ngModel)]="transfer.recipient_account_number" formControlName="recipient_account_number"
+               [class.invalid]="form.controls['recipient_account_number'].touched && !form.controls['recipient_account_number'].valid"
+        >
+        <label for="recipient_account_number"
+               [class.active]="transfer.recipient_account_number"
+               data-error="Você precisa informar ao menos 3 caracteres">
+          Conta de destino
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">email</i> -->
+        <input id="recipient_agency" type="text" class="validate"
+               [(ngModel)]="transfer.recipient_agency" formControlName="recipient_agency"
+               [class.invalid]="form.controls['recipient_agency'].touched && !form.controls['recipient_agency'].valid">
+        <label for="recipient_agency"
+               [class.active]="transfer.recipient_agency"
+               data-error="Agência inválida">
+          Agência de destino
+        </label>
+      </div>
+    </div>
+ 
+    <div class="row">
+      <div class="input-field col s12">
+        <!-- <i class="material-icons prefix">email</i> -->
+        <input id="amount" type="text" class="validate"
+               [(ngModel)]="transfer.amount" formControlName="amount"
+               [class.invalid]="form.controls['amount'].touched && !form.controls['amount'].valid">
+        <label for="amount"
+               [class.active]="transfer.amount"
+               data-error="Valor inválido">
+          Valor
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn waves-effect waves-light" type="submit"
+                [disabled]="!form.valid">
+          Submeter<i class="material-icons right"></i>
+        </button>
+        <a class="waves-effect waves-light btn red"
+        (click)="onCancel()">Cancelar</a>
+      </div>
+    </div>
+  </form>
+</div>

@@ -3,23 +3,23 @@
   <form materialize class="col s12" [formGroup]="form" (ngSubmit)="onSignin()">
     <div class="row">
       <div class="input-field col s12">
-        <input id="numero" type="text" class="validate"
-               formControlName="numero"
-               [class.invalid]="form.controls['numero'].touched && !form.controls['numero'].valid">
-        <label for="numero"
-               data-error="Invalid numero">
-          numero
+        <input id="number" type="text" class="validate"
+               formControlName="number"
+               [class.invalid]="form.controls['number'].touched && !form.controls['number'].valid">
+        <label for="number"
+               data-error="Número de conta inválido">
+          Número
         </label>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s12">
-        <input id="agencia" type="text" class="validate"
-               formControlName="agencia"
-               [class.invalid]="form.controls['agencia'].touched && !form.controls['agencia'].valid">
-        <label for="agencia"
-               data-error="agencia is mandatory">
-          agencia
+        <input id="agency" type="text" class="validate"
+               formControlName="agency"
+               [class.invalid]="form.controls['agency'].touched && !form.controls['agency'].valid">
+        <label for="agency"
+               data-error="Agência é obrigatória">
+          Agência
         </label>
       </div>
     </div>

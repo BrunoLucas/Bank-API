@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col s12">
+    <div class="card-panel">
+      <div class="card-stacked">
+        <div class="card-content">
+          <p>Detalhes de transferência:</p>
+          <p>#: {{ selectedTransfer?.id }}</p>
+          <p>Conta: {{ selectedTransfer?.number }}</p>
+          <p>Agência: {{ selectedTransfer?.agency }}</p>
+          <p>Conta de destino: {{ selectedTransfer?.recipient_account}}</p>
+          <p>Agência de destino: {{ selectedTransfer?.recipient_agency}}</p>
+          <p>Data de transferência: {{ selectedTransfer?.date}}</p>
+          <p>Valor $: {{ selectedTransfer?.amount}}</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

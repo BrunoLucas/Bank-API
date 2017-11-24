@@ -1,4 +1,4 @@
-var db_string = 'mongodb://127.0.0.1/bank4';
+var db_string = 'mongodb://127.0.0.1/bank7';
 var mongoose = require('mongoose');
 
 mongoose.Promise = require('bluebird');
@@ -6,12 +6,12 @@ mongoose.connect(db_string,  { useMongoClient: true });
 
 var db = mongoose.connection;
 
-var Conta = require('./models/conta');
+var Account = require('./models/account');
 
-var Movimentacao = require('./models/movimentacao');
+var Movement = require('./models/movement');
 
 db.on('error', console.error.bind(console, 'Erro ao conectar no banco'));
 
-exports.Conta = Conta;
+exports.Account = Account;
 
-exports.Movimentacao = Movimentacao;
+exports.Movement = Movement;

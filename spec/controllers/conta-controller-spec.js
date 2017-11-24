@@ -2,14 +2,14 @@
 
 var request = require('request');
 
-var Conta = require('../../app/models/conta.js');
+var account = require('../../app/models/account.js');
 
-describe('Teste de Conta Controller', function(){
+describe('Teste de account Controller', function(){
  
-        var contaController = require('../../app/controllers/conta-controller.js');
+        var accountController = require('../../app/controllers/account-controller.js');
 
         it('Lista de contas não deve estar vazia', function(){
-            contaController.listar(() =>{
+            accountController.list(() =>{
             }).then(resp =>{
                 expect(resp.length).toBeGreaterThan(0); 
             }).catch(error=>{
@@ -19,16 +19,16 @@ describe('Teste de Conta Controller', function(){
         });
 
         it('Deve retornar uma conta pelo numero e agencia', function(){
-            contaController.buscarPorNumeroContaEAgencia(123456,"1803").then(resp=>{
-                expect(resp.numero).toEqual(123456);
-                expect(resp.agencia).toEqual('1803');
+            accountController.searchByAccountNumberAndAgency(123456,"1803").then(resp=>{
+                expect(resp.number).toEqual(123456);
+                expect(resp.agency).toEqual('1803');
             }).catch(error=>{
                 fail('erro em retornar conta pelo numero e agencia ' + error);
             })
         });
 
         it('Não deve encontrar uma conta inexistente', function(){
-            contaController.buscarPorNumeroContaEAgencia(1, 1803).then(resp=>{
+            accountController.searchByAccountNumberAndAgency(1, 1803).then(resp=>{
                 expect(resp).toBeUndefined();
             }).catch(error=>{
                 expect(error).toBeDefined();
@@ -36,12 +36,12 @@ describe('Teste de Conta Controller', function(){
         });
 
 
-        function criarConta(){
-            conta = new Conta();
-            conta.numero = 123456;
-            conta.agencia = '1803';
-            conta.nome = 'Conta Teste 1';
-            conta.data_criacao = new Date();
-            return conta;
+        function createAccount(){
+            account = new account();
+            account.number = 123456;
+            account.agency = '1803';
+            account.nome = 'account Teste 1';
+            account.creation_date = new Date();
+            return account;
         }
     });

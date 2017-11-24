@@ -15,7 +15,7 @@ export class AccountService {
   constructor(private router: Router, private _http: Http) {}
 
    obterDadosDeConta(account: Account) {
-    return this._http.get(`http://localhost:5000/api/v1/conta/${account.numero}/agencia/${account.agencia}`)
+    return this._http.get(`http://localhost:5000/api/v1/account/${account.number}/agency/${account.agency}`)
                 .map((res: Response) => res.json());
   }
 

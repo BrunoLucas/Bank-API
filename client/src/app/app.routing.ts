@@ -7,8 +7,8 @@ import { SigninComponent } from './signin/signin.component';
 import { AuthGuard } from './auth/auth.guard';
 
 const appRoutes: Routes = [
-  { path: 'transferencias',
-    loadChildren: 'app/transferencias/transferencia.module#TransferenciaModule',
+  { path: 'transfers',
+    loadChildren: 'app/transfers/transfer.module#TransferModule',
     canActivate: [AuthGuard]
   },
   { path: '', pathMatch: 'full', component: HomeComponent,

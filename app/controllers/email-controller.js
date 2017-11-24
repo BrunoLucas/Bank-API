@@ -16,28 +16,28 @@ var mailOptions = {
     html: '<html></html>'
   };
 
-exports.sendMail = (dadosMovimentacao)=>{
+exports.sendMail = (transactionData)=>{
 
     return new Promise((resolve, reject)=>{
         mailOptions.from = 'minibankstonepagamentos@gmail.com';
-        mailOptions.to = dadosMovimentacao.email_comprovante;
-        mailOptions.subject = `Comprovante de transferência - ${dadosMovimentacao.data_movimentacao}`;
-        const conteudo = `<html>
+        mailOptions.to = transactionData.email;
+        mailOptions.subject = `Comprovante de transferência - ${transactionData.date_movement}`;
+        const content = `<html>
                 <body></body>
-                <h2>Comprovante de transferência - ${dadosMovimentacao.data_movimentacao}</h2>
+                <h2>Comprovante de transferência - ${transactionData.date_movement}</h2>
                 <div>Conta remetente:</div>
-                <div>${dadosMovimentacao.numero_conta_remetente}</div>
+                <div>${transactionData.sender_account_number}</div>
                 <div>Agência remetente:</div>
-                <div>${dadosMovimentacao.agencia_remetente}</div>
+                <div>${transactionData.sender_agency}</div>
                 <div>Conta destinatário:</div>
-                <div>${dadosMovimentacao.numero_conta_destinatario}</div>
+                <div>${transactionData.recipient_account_number}</div>
                 <div>Agência destinatário:</div>
-                <div>${dadosMovimentacao.agencia_destinatario}</div>
+                <div>${transactionData.recipient_agency}</div>
                 <div>Valor:</div>
-                <div>${dadosMovimentacao.valor_movimentacao}</div>
+                <div>${transactionData.amount}</div>
          </html>
         `;
-        mailOptions.html = conteudo;
+        mailOptions.html = content;
         transporter.sendMail(mailOptions, function(error, info){
             if(error){
                 console.log(error);

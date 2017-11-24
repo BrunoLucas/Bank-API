@@ -2,20 +2,20 @@ var app = require('./app/app_config.js');
 
 var validator = require('validator');
 
-var contaController = require('./app/controllers/conta-controller.js');
+var accountController = require('./app/controllers/account-controller.js');
 
-var movimentoController = require('./app/controllers/movimentacao-controller.js');
+var movementController = require('./app/controllers/movement-controller.js');
 
-var Conta = require('./app/models/conta.js');
-var Movimentacao = require('./app/models/movimentacao.js');
+var Account = require('./app/models/account.js');
+var Movement = require('./app/models/movement.js');
 
 app.get('/', function(req, res){
     console.log('rodando');
 });
 
-app.get('/api/v1/conta', function(req, res){
+app.get('/api/v1/account', function(req, res){
 
-    contaController.listar(()=>{
+    accountController.list(()=>{
         
     }).then(resp=>{
         res.status(200).json(resp);
@@ -24,14 +24,14 @@ app.get('/api/v1/conta', function(req, res){
     });
 }); 
 
-app.get('/api/v1/conta/:conta/agencia/:agencia', function(req, res){
+app.get('/api/v1/account/:account/agency/:agency', function(req, res){
     
-        var conta = parseInt(req.params.conta);
-        var agencia = req.params.agencia;
-        contaController.buscarPorNumeroContaEAgencia(conta, agencia).then(resp=>{
-            movimentoController.obterSaldoAtualDeConta(conta, agencia).then(saldo =>{
-                console.log(saldo);
-               resp.saldo = saldo;
+        var account = parseInt(req.params.account);
+        var agency = req.params.agency;
+        accountController.searchByAccountNumberAndAgency(account, agency).then(resp=>{
+            movementController.getCurrentAccountBalance(account, agency).then(amount =>{
+                console.log(amount);
+               resp.opening_balance = amount;
                res.status(200).json(resp);
             });
         }).catch(error=>{
@@ -41,12 +41,12 @@ app.get('/api/v1/conta/:conta/agencia/:agencia', function(req, res){
 
     
 
-app.post('/api/v1/conta',(req, res) =>{
-    contaController.salvar(req.body).then(contaRetornada => {
-        movimentoController.depositar(contaRetornada, req.body.valor_deposito_inicial).catch(error=>{
+app.post('/api/v1/account',(req, res) =>{
+    accountController.save(req.body).then(accountReturned => {
+        movementController.deposit(accountReturned, req.body.opening_balance).catch(error=>{
             res.status(500).json(error);
         });
-        res.status(201).json(contaRetornada);
+        res.status(201).json(accountReturned);
     }).catch(error =>{
         res.status(500).json(error);
     })
@@ -54,10 +54,10 @@ app.post('/api/v1/conta',(req, res) =>{
 
 app.post('/api/v1/login',(req, res) =>{
     console.log(req.body);
-    var conta = parseInt(req.body.conta);
-    var agencia = req.body.agencia;
-    contaController.buscarPorNumeroContaEAgencia(conta, agencia).then(contaRetornada => {
-        res.status(200).json(contaRetornada);
+    var account = parseInt(req.body.account);
+    var agency = req.body.agency;
+    accountController.searchByAccountNumberAndAgency(account, agency).then(accountReturned => {
+        res.status(200).json(accountReturned);
     }).catch(error =>{
         res.status(500).json(error);
     })
@@ -65,45 +65,45 @@ app.post('/api/v1/login',(req, res) =>{
 
 
 
-app.get('/api/v1/conta/:numero/agencia/:agencia/historico', (req, res)=>{
+app.get('/api/v1/account/:number/agency/:agency/historic', (req, res)=>{
 
-    var numero = validator.trim(validator.escape(req.params.numero));
-    var agencia = validator.trim(validator.escape(req.params.agencia));
-    movimentoController.obterHistoricoDeConta(numero, agencia).then(movimentos =>{
-        res.status(200).json(movimentos);
+    var number = validator.trim(validator.escape(req.params.number));
+    var agency = validator.trim(validator.escape(req.params.agency));
+    movementController.getAccountHistory(number, agency).then(movements =>{
+        res.status(200).json(movements);
     }).catch(error=>{
         res.status(500).json(error);
     })
 });
-app.get('/api/v1/historico', (req, res)=>{
+app.get('/api/v1/history', (req, res)=>{
 
-    movimentoController.obterHistoricoDeTodasAsContas().then(movimentos =>{
-        res.status(200).json(movimentos);
+    movementController.getHistoryAllAccounts().then(movements =>{
+        res.status(200).json(movements);
     }).catch(error=>{
         res.status(500).json(error);
     })
 });
 
-app.get('/api/v1/conta/:numero/agencia/:agencia/saldo', (req, res)=>{
+app.get('/api/v1/account/:number/agency/:agency/amount', (req, res)=>{
     
-        var numero = validator.trim(validator.escape(req.params.numero));
-        var agencia = validator.trim(validator.escape(req.params.agencia));
-        movimentoController.obterSaldoAtualDeConta(numero, agencia).then(saldo =>{
-            res.status(200).json(saldo);
+        var number = validator.trim(validator.escape(req.params.number));
+        var agency = validator.trim(validator.escape(req.params.agency));
+        movementController.getCurrentAccountBalance(number, agency).then(amount =>{
+            res.status(200).json(amount);
         }).catch(error=>{
             res.status(500).json(error);
         })
     });
 
-app.post('/api/v1/conta/transfer', (req, res)=>{
-    var movimentacao = new Movimentacao();
-    movimentacao.numero_conta_remetente = req.body.numero_conta_remetente;
-    movimentacao.agencia_remetente = req.body.agencia_remetente;
-    movimentacao.numero_conta_destinatario = req.body.numero_conta_destinatario;
-    movimentacao.agencia_destinatario = req.body.agencia_destinatario;
-    movimentacao.valor_movimentacao = req.body.valor_movimentacao;
-    movimentacao.email_comprovante = req.body.email_comprovante;
-    movimentoController.transferir(movimentacao).then(result=>{
+app.post('/api/v1/account/transfer', (req, res)=>{
+    var movement = new Movement();
+    movement.sender_account_number = req.body.sender_account_number;
+    movement.sender_agency = req.body.sender_agency;
+    movement.recipient_account_number = req.body.recipient_account_number;
+    movement.recipient_agency = req.body.recipient_agency;
+    movement.amount = req.body.amount;
+    movement.email = req.body.email;
+    movementController.transfer(movement).then(result=>{
         return res.status(201).json(result);
     }).catch(error=>{
         return res.status(500).json(error.message);
@@ -111,11 +111,11 @@ app.post('/api/v1/conta/transfer', (req, res)=>{
     
 });
 
-app.get('/api/v1/conta/transfer/:id', (req, res)=>{
-    const idMovimento = req.params.id;
+app.get('/api/v1/account/transfer/:id', (req, res)=>{
+    const idMovement = req.params.id;
 
     
-    movimentoController.obterMovimentoPor(idMovimento).then(result=>{
+    movementController.getMovementBy(idMovement).then(result=>{
         return res.status(200).json(result);
     }).catch(error=>{
         return res.status(500).json(error.message);

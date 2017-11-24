@@ -22,10 +22,10 @@ export class SigninComponent implements OnInit {
     this.authService.signIn(this.form.value);
   }
 
-  ngOnInit():any {
+  ngOnInit(): any {
     this.form = this.fb.group({
-        numero: ['', Validators.required],
-        agencia: ['', Validators.required],
+        number: ['', Validators.required],
+        agency: ['', Validators.required],
     });
   }
 }

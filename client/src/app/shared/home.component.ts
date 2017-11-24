@@ -18,6 +18,6 @@ export class HomeComponent implements OnInit{
   }
 
   private redirecionar() {
-    this.router.navigate(['/transferencias']);
+    this.router.navigate(['/transfers']);
   }
 }
