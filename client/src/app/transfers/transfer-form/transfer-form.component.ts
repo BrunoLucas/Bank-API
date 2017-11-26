@@ -31,35 +31,22 @@ export class TransferFormComponent implements OnInit, OnDestroy, ComponentCanDea
     console.log('ngOnInit');
     this.subscription = this.route.params.subscribe(
       (params: any) => {
-        if (params.hasOwnProperty('id')) {
-          this.isNew = false;
-          this.transferIndex = +params['id'];
-          this.transfersService.get(this.transferIndex)
-            .subscribe(data => this.transfer = data);
-          this.title = 'Edit transfer';
-        } else {
-          this.isNew = true;
-          this.transfer = new Transfer();
-          this.transfer.number  = localStorage.getItem('account');
-          this.transfer.agency = localStorage.getItem('agency');
-          this.title = 'New transfer';
-        }
+
+        this.isNew = true;
+        this.transfer = new Transfer();
+        this.transfer.number = localStorage.getItem('account');
+        this.transfer.agency = localStorage.getItem('agency');
+        this.title = 'New transfer';
         this.initForm();
       }
     );
     console.log('pegando conta da sessao');
-    this.transfer.number  = localStorage.getItem('account');
+    this.transfer.number = localStorage.getItem('account');
     this.transfer.agency = localStorage.getItem('agency');
   }
 
   private initForm() {
     this.form = this.formBuilder.group({
-      sender_account_number: ['', [
-        Validators.required,
-        Validators.minLength(3)
-      ]],
-      sender_agency: ['', [
-        Validators.required]],
       recipient_account_number: ['', [
         Validators.required,
         Validators.minLength(3)
@@ -67,9 +54,12 @@ export class TransferFormComponent implements OnInit, OnDestroy, ComponentCanDea
       recipient_agency: ['', [
         Validators.required]],
       amount: ['', [
-        Validators.required]]
+        Validators.required]],
+      email: ['', [
+        Validators.required,
+        Validators.email]]
     });
-}
+  }
 
   onCancel() {
     this.navigateBack();
@@ -82,6 +72,8 @@ export class TransferFormComponent implements OnInit, OnDestroy, ComponentCanDea
   onSave() {
     const transferValue = this.form.value;
     let result;
+    transferValue.sender_account_number = localStorage.getItem('account');
+    transferValue.sender_agency = localStorage.getItem('agency');
 
     result = this.transfersService.add(transferValue);
 
@@ -90,7 +82,8 @@ export class TransferFormComponent implements OnInit, OnDestroy, ComponentCanDea
 
     result.subscribe(data => this.navigateBack(),
       err => {
-        alert('An error occurred.' + err);
+        console.log(err);
+        alert('Ocorreu um erro: ' + err._body);
       });
   }
 
@@ -104,4 +97,5 @@ export class TransferFormComponent implements OnInit, OnDestroy, ComponentCanDea
     }
     return true;
   }
+
 }

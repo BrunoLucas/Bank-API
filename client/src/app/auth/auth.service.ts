@@ -34,6 +34,7 @@ export class AuthService {
                 }, error => {
                     console.log('Erro ao tentar obter dados de conta ' + error);
                     this.authenticated = false;
+                    alert(error.statusText);
                 });
   }
 
@@ -49,5 +50,11 @@ export class AuthService {
 
   private showNavBar(ifShow: boolean) {
      this.showNavBarEmitter.emit(ifShow);
+  }
+
+  private handleError(error: any) {
+    const erro = error.message || 'Server error';
+    console.error('Ocorreu um erro ' +  error.statusText);
+    return Observable.throw(error);
   }
 }

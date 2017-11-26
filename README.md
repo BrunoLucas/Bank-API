@@ -25,7 +25,6 @@ npm version v.3.10.8
 
 mongo v.2.6.10
 
-
 You can run the following in browser:
 
 http://localhost:4210

@@ -60,8 +60,8 @@ export class TransferService {
 
   private handleError(error: any) {
     const erro = error.message || 'Server error';
-    console.error('Ocorreu um erro', error);
-    return Observable.throw(erro);
+    console.error('Ocorreu um erro ' +  error.statusText);
+    return Observable.throw(error);
   }
 
   private getUrl(id) {

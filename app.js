@@ -9,6 +9,10 @@ var movementController = require('./app/controllers/movement-controller.js');
 var Account = require('./app/models/account.js');
 var Movement = require('./app/models/movement.js');
 
+var testEnvironment = process.env.TEST;
+
+console.log(`Environment test is ${testEnvironment}`);
+
 app.get('/', function(req, res){
     console.log('rodando');
 });
@@ -20,6 +24,7 @@ app.get('/api/v1/account', function(req, res){
     }).then(resp=>{
         res.status(200).json(resp);
     }).catch(error=>{
+        res.statusMessage = error.message;
         res.status(500).json(error);
     });
 }); 
@@ -35,6 +40,7 @@ app.get('/api/v1/account/:account/agency/:agency', function(req, res){
                res.status(200).json(resp);
             });
         }).catch(error=>{
+            res.statusMessage = error.message;
             res.status(500).json(error);
         });
     }); 
@@ -48,6 +54,7 @@ app.post('/api/v1/account',(req, res) =>{
         });
         res.status(201).json(accountReturned);
     }).catch(error =>{
+        res.statusMessage = error.message;
         res.status(500).json(error);
     })
 });
@@ -59,6 +66,7 @@ app.post('/api/v1/login',(req, res) =>{
     accountController.searchByAccountNumberAndAgency(account, agency).then(accountReturned => {
         res.status(200).json(accountReturned);
     }).catch(error =>{
+        res.statusMessage = error;
         res.status(500).json(error);
     })
 });
@@ -72,6 +80,7 @@ app.get('/api/v1/account/:number/agency/:agency/historic', (req, res)=>{
     movementController.getAccountHistory(number, agency).then(movements =>{
         res.status(200).json(movements);
     }).catch(error=>{
+        res.statusMessage = error.message;
         res.status(500).json(error);
     })
 });
@@ -80,6 +89,7 @@ app.get('/api/v1/history', (req, res)=>{
     movementController.getHistoryAllAccounts().then(movements =>{
         res.status(200).json(movements);
     }).catch(error=>{
+        res.statusMessage = error.message;
         res.status(500).json(error);
     })
 });
@@ -89,8 +99,10 @@ app.get('/api/v1/account/:number/agency/:agency/amount', (req, res)=>{
         var number = validator.trim(validator.escape(req.params.number));
         var agency = validator.trim(validator.escape(req.params.agency));
         movementController.getCurrentAccountBalance(number, agency).then(amount =>{
+            res.statusMessage = error.message;
             res.status(200).json(amount);
         }).catch(error=>{
+            res.statusMessage = error.message;
             res.status(500).json(error);
         })
     });
@@ -106,6 +118,7 @@ app.post('/api/v1/account/transfer', (req, res)=>{
     movementController.transfer(movement).then(result=>{
         return res.status(201).json(result);
     }).catch(error=>{
+        res.statusMessage = error.message;
         return res.status(500).json(error.message);
     })
     
@@ -118,6 +131,7 @@ app.get('/api/v1/account/transfer/:id', (req, res)=>{
     movementController.getMovementBy(idMovement).then(result=>{
         return res.status(200).json(result);
     }).catch(error=>{
+        res.statusMessage = error.message;
         return res.status(500).json(error.message);
     })
     

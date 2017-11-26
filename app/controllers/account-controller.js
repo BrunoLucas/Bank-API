@@ -1,49 +1,77 @@
 var db = require('../db_config.js');
-exports.list = () =>{
+var loki = require('lokijs');
+var accountService = require('../services/account-service');
+var accountServiceTest = require('../services/account-service-test');
 
-    return new Promise((resolve, reject)=>{
+if (typeof localStorage === "undefined" || localStorage === null) {
+    var LocalStorage = require('node-localstorage').LocalStorage;
+    localStorage = new LocalStorage('./dbTest');
+}
 
-        db.Account.find({}, (error, account)=>{
-            if(error){
-                reject(error, 'Erro ao buscar');
-            }else{
-                resolve(account);
-            }
-        });   
+var testEnvironment = process.env.TEST;
+
+exports.list = () => {
+
+    return new Promise((resolve, reject) => {
+
+        if (testEnvironment === "true") {
+            console.log('simulating accounts for test environment');
+            accountServiceTest.list().then(resp => {
+                resolve(resp);
+            }).catch(error => reject(error));
+        } else {
+            accountService.list().then(resp => {
+                resolve(resp);
+            }).catch(error => reject(error));
+        }
     });
 };
 
-exports.save = (accountData)=>{
-    
-    return new Promise((resolve, reject)=>{ 
-        var account = new db.Account();
-        account.number = accountData.number;
-        account.agency = accountData.agency;
-        account.name = accountData.name;
-        account.creation_date = new Date();
-        account.save().then((createdAccount)=>{
-            resolve(createdAccount);
-        }).error(msg=>{
-            reject(msg, 'Erro ao criar conta');
-        });
+exports.save = (accountData) => {
 
+    return new Promise((resolve, reject) => {
+
+        if (testEnvironment === "true") {
+            console.log('save in memory for test environment');
+            var accountMemory = {};
+            accountMemory.number = accountData.number;
+            accountMemory.agency = accountData.agency;
+            accountMemory.name = accountData.name;
+            accountMemory.creation_date = new Date().toString();
+            accountServiceTest.save(accountMemory).then(resp => {
+                resolve(resp);
+            }).catch(error => reject(error));
+        } else {
+            var account = new db.Account();
+            account.number = accountData.number;
+            account.agency = accountData.agency;
+            account.name = accountData.name;
+            account.creation_date = new Date();
+            accountService.save(account).then(resp => {
+                resolve(resp);
+            }).catch(error => reject(error));;
+        }
     });
 };
 
 
-exports.searchByAccountNumberAndAgency = (accountNumber=0,agency='') =>{
- 
-    return new Promise((resolve, reject)=>{ 
-        db.Account.findOne({number : accountNumber, agency : agency}).exec((function(error, account){
+exports.searchByAccountNumberAndAgency = (accountNumber = 0, agency = '') => {
 
-            if(!account){
-                console.log(account);
-                reject(error, 'Erro ao buscar conta e agencia');
-            }else{
-                resolve(account);
-            }
-        }));
-    });       
+    return new Promise((resolve, reject) => {
+
+        if (testEnvironment === "true") {
+            accountServiceTest.searchByAccountNumberAndAgency(accountNumber, agency)
+                .then(resp => {
+                    resolve(resp);
+                }).catch(error => reject(error));
+        }
+        else {
+            accountService.searchByAccountNumberAndAgency(accountNumber, agency)
+            .then(resp => {
+                resolve(resp);
+            }).catch(error => reject(error));
+        }
+    });
 };
 
 
