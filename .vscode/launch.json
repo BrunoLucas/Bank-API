@@ -9,7 +9,10 @@
         "program": "${workspaceRoot}/app.js",
         "restart": true,
         "console": "integratedTerminal",
-        "internalConsoleOptions": "neverOpen"
+        "internalConsoleOptions": "neverOpen",
+        "env": {
+            "TEST": "true"
+        }
     },
     {
         "type": "node",
