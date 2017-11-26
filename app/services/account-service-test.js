@@ -7,7 +7,7 @@ exports.list = () => {
 
 
         console.log('simulating accounts for test environment');
-        // let accounts = [];
+         let accounts = [];
         // for(i=0;i< 10;i++){
         //     let account = {};
         //     account._id = i;
@@ -17,7 +17,7 @@ exports.list = () => {
         //     account.opening_balance = 200.00;
         //     accounts.push(account);
         // }
-        // resolve(accounts);
+         resolve(accounts);
 
     });
 };
@@ -46,7 +46,7 @@ exports.searchByAccountNumberAndAgency = (accountNumber = 0, agency = '') => {
             {number:
              {$aeq :accountNumber}, agency : {$aeq : agency}
             });
-        if(account){
+        if(account[0] != undefined && account[0] != null){
             resolve(account[0]);
         }else{
             reject('Agencia e conta nao encontrados');

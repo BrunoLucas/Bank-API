@@ -27,17 +27,17 @@ exports.list = () => {
 
 exports.transfer = (movementData) => {
 
-  return new Promise((resolve, reject)=>{
-        if(testEnvironment === 'true') {
-            movementServiceTest.transfer(movementData).then(resp=>{
+    return new Promise((resolve, reject) => {
+        if (testEnvironment === 'true') {
+            movementServiceTest.transfer(movementData).then(resp => {
                 resolve(resp);
-            }).catch(error=>reject(error));
-        }else{
-            movementService.transfer(movementData).then(resp=>{
+            }).catch(error => reject(error));
+        } else {
+            movementService.transfer(movementData).then(resp => {
                 resolve(resp);
-            }).catch(error=>reject(error));
+            }).catch(error => reject(error));
         }
-  })
+    })
 };
 
 exports.getAccountHistory = (number, agency) => {
@@ -118,15 +118,18 @@ exports.deposit = (senderAccount, amount) => {
 };
 
 exports.getMovementBy = (id) => {
-    let movement = new db.Movement();
-    movement._id = id;
+
     return new Promise((resolve, reject) => {
-        db.Movement.findById(movement).exec((error, movement) => {
-            if (error || !movement) {
-                reject('Erro ao obter movimento');
-            } else {
-                resolve(movement);
-            }
-        });
+
+
+        if (testEnvironment === 'true') {
+            movementServiceTest.getMovementBy(id).then(resp => {
+                resolve(resp[0]);
+            }).catch(error => reject(error));
+        } else {
+            movementService.getMovementBy(id).then(resp => {
+                resolve(resp);
+            }).catch(error => reject(error));
+        }
     });
 }

@@ -62,13 +62,19 @@ exports.transfer = ((movementData) => {
 
         return new Promise((resolve, reject) => {
 
-
+            movementData.date_movement = new Date();
+            movementData.type_account_movement = 'TRA';
+            movementData._id = Math.floor(Math.random() * 777777777) + new Date().getTime();
             console.log('test environment');
             db.movementMemoryDB.insert({
                 recipient_account_number: movementData.recipient_account_number,
                 recipient_agency: movementData.recipient_agency,
                 sender_account_number: movementData.sender_account_number,
                 sender_agency: movementData.sender_agency,
+                _id: movementData._id,
+                date_movement: movementData.date_movement,
+                type_account_movement: movementData.type_account_movement,
+                email: movementData.email
             });
 
             resolve(movementData);
@@ -142,6 +148,18 @@ exports.getAccountHistory = (number, agency) => {
     });
 }
 
+exports.getMovementBy = (id) => {
+
+    return new Promise((resolve, reject) => {
+        const movement = db.movementMemoryDB.find({
+            _id: {$aeq: id}
+        });
+        resolve(movement);
+    }).catch(error=>{
+        reject(error);
+    })
+}
+
 exports.deposit = (senderAccount, amount) => {
 
     return new Promise((resolve, reject) => {
@@ -157,7 +175,9 @@ exports.deposit = (senderAccount, amount) => {
         movement.sender_agency = senderAccount.agency;
         movement.recipient_agency = senderAccount.agency;
         movement.amount = amount;
-        movement.data_movement = new Date();
+        movement.date_movement = new Date();
+        movement._id = Math.floor(Math.random() * 777777777) + new Date().getTime();
+
         db.movementMemoryDB.insert({
             type_account_movement: movement.type_account_movement,
             recipient_account_number: movement.recipient_account_number,
@@ -165,7 +185,8 @@ exports.deposit = (senderAccount, amount) => {
             sender_agency: movement.sender_agency,
             recipient_agency: movement.recipient_agency,
             amount: movement.amount,
-            data_movement: movement.data_movement
+            date_movement: movement.date_movement,
+            _id: movement._id
         });
 
 

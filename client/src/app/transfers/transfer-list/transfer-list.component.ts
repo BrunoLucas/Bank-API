@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { TransferService } from '../transfer.service';
 import { Transfer } from '../transfer';
 import { AuthService } from '../../auth/auth.service';

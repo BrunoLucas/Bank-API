@@ -22,10 +22,11 @@ export class TransferDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.params.subscribe((params: any) => {
         this.transferIndex = params['id'];
+        // console.log('test');
         this.transferService.get(this.transferIndex)
         .subscribe(data => {
             this.selectedTransfer = data;
-            this.selectedTransfer.id = data._id;
+            this.selectedTransfer._id = data._id;
             this.selectedTransfer.agency = data.sender_agency;
             this.selectedTransfer.recipient_agency = data.recipient_agency;
             this.selectedTransfer.number = data.sender_account_number;

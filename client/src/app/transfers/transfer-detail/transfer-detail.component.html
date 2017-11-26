@@ -4,7 +4,7 @@
       <div class="card-stacked">
         <div class="card-content">
           <p>Detalhes de transferência:</p>
-          <p>#: {{ selectedTransfer?.id }}</p>
+          <p>#: {{ selectedTransfer?._id }}</p>
           <p>Conta: {{ selectedTransfer?.number }}</p>
           <p>Agência: {{ selectedTransfer?.agency }}</p>
           <p>Conta de destino: {{ selectedTransfer?.recipient_account}}</p>

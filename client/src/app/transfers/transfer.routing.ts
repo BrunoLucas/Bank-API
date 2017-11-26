@@ -11,9 +11,7 @@ const transfers_ROUTES: Routes = [
       { path: '', component: TransferStartComponent },
       { path: 'new', component: TransferFormComponent ,
         canDeactivate: [TransferFormGuard]},
-      { path: ':id', component: TransferDetailComponent },
-      { path: ':id/edit', component: TransferFormComponent,
-        canDeactivate: [TransferFormGuard]}
+      { path: ':id', component: TransferDetailComponent }
   ]}
 ];
 

@@ -33,7 +33,8 @@ export class TransferService {
 
   get(id) {
     return this._http.get(`http://localhost:5000/api/v1/account/transfer/${id}`)
-                .map((res: Response) => res.json());
+                .map((res: Response) =>{
+                  console.log('aa'); return res.json();});
   }
 
   add(record) {
