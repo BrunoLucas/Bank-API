@@ -3,10 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
-
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api/in-memory-web-api.module';
-import { TransfersInMemoryDS } from './transfers-in-memory-ds';
-
 import { TransferComponent } from './transfer.component';
 import { TransferStartComponent } from './transfer-start.component';
 import { TransferListComponent } from './transfer-list/transfer-list.component';
@@ -25,7 +21,6 @@ import { TransferDetailAccountComponent } from './transfer-detail-account/transf
       ReactiveFormsModule,
       RouterModule,
       HttpModule,
-      InMemoryWebApiModule.forRoot(TransfersInMemoryDS, { delay: 600 }),
       transfersRouting
     ],
     declarations: [

@@ -8,7 +8,7 @@ import { AuthGuard } from './auth/auth.guard';
 
 const appRoutes: Routes = [
   { path: 'transfers',
-    loadChildren: 'app/transfers/transfer.module#TransferModule',
+    loadChildren: './transfers/transfer.module#TransferModule',
     canActivate: [AuthGuard]
   },
   { path: '', pathMatch: 'full', component: HomeComponent,

@@ -29,7 +29,7 @@ export class TransferListComponent implements OnInit {
                               transfer.recipient_agency = movimento.recipient_agency;
                               transfer.amount = movimento.amount;
                               transfer.date = new DatePipe('pt-BR').transform(movimento.date_movement, 'dd/MM/yyyy');
-                              transfer.id = movimento._id;
+                              transfer._id = movimento._id;
                               this.transfers.push(transfer);
                         });
             }
@@ -38,7 +38,10 @@ export class TransferListComponent implements OnInit {
 
     this.transfersService.transfersChanged.subscribe(
       (observable: any) => observable.subscribe(
-        data => this.transfers = data
+        data => {
+          console.log('data ' + data);
+          this.transfers = data;
+        }
       )
     );
   }

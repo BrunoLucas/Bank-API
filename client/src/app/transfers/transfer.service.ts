@@ -11,7 +11,7 @@ export class TransferService {
 
   transfersChanged = new EventEmitter<Observable<Transfer[]>>();
 
-  private url = 'app/transferencias';
+  private url = 'app/transfers/';
 
   public constructor(private _http: Http) { }
 
@@ -21,8 +21,13 @@ export class TransferService {
     }
 
   getAll(): Observable<Transfer[]> {
-    return this._http.get(this.url)
-      .map(res => res.json().data)
+    const account = localStorage.getItem('account');
+    const agency = localStorage.getItem('agency');
+    return this._http.get(`http://localhost:5000/api/v1/account/${account}/agency/${agency}/historic`)
+    .map(res => {
+      console.log(res);
+      return res.json();
+    })
       .catch(this.handleError);
   }
 

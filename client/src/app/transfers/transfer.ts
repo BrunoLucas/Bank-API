@@ -1,7 +1,7 @@
 import { Phone } from './phone';
 
 export class Transfer {
-  id: number;
+  _id: number;
   name: string;
   email: string;
   phone: Phone = new Phone();
