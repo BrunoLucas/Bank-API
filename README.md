@@ -59,7 +59,7 @@ Run the command<pre> TEST=true npm run start</pre>
 <h5>Running with Docker</h5>
 Run the command<pre> docker-compose up</pre>
 </br>
-Change the file <i>db_config.js</i> to this url: <i>'mongodb://mongo/bank10'</i>
+<i>Change the file db_config.js to this url: 'mongodb://mongo/bank10'</i>
 
 
 
